@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
-<head><title>env</title></head>
+<head><title>pict</title></head>
 <body>
-<form action="#" method="post">
-<input  type="text" name="file_name" value="__" />
-<input type="submit">
-{% if dictkeys.method != '' %}
-<li>{{ dictkeys.method }}</li>
-{% endif %}
-{% for val in dictval %}
-<li>{{ val.key }} : {{ val.val }}</li>
+{% if message == '' %}
+<p>{{ count }}</p>
+{% for val in rect %}
+<li>左上{{ val.lt }} ■ {{ val.cube }} </li>
 {% endfor %}
-</form>
+<img src="detected.jpg"  alt="変換後" title="変換後" />
+{% else %}
+<p>{{ message }}</p>
+<img src="detected.jpg"  alt="変換後" title="変換後" />
+{% endif %}
 </body>
 </html>
