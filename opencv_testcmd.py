@@ -42,7 +42,7 @@ else:
 cv2.imwrite('detected.jpg', img)
 cgitb.enable()
 env = Environment(loader=FileSystemLoader('./',encoding='utf8'))
-tpl = env.get_template('opencv_test.tpl.html')
+tpl = env.get_template('./template/opencv_test.tpl.html')
 html = tpl.render({'filename':filename,'message':msg,'count':cnt,'rect':status})
 print "Content-Type: text/html;charset=utf-8"
 print ""

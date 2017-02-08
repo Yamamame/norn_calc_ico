@@ -9,7 +9,7 @@ import sys
 
 cgitb.enable()
 env = Environment(loader=FileSystemLoader('./',encoding='utf8'))
-tpl = env.get_template('cgi_jinja.tpl.html')
+tpl = env.get_template('./template/cgi_jinja.tpl.html')
 vd = {}
 v  = []
 ak = ['method']

@@ -14,4 +14,4 @@ import sys
 
 cgitb.enable()
 env = Environment(loader=FileSystemLoader('./',encoding='utf8'))
-tpl = env.get_template('opencv_test.tpl.html')
+tpl = env.get_template('./template/opencv_test.tpl.html')
