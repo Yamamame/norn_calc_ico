@@ -9,11 +9,21 @@
       <h2>抽出後</h2>
       <form action="#" method="post" name="file_send">
         <input type="file" name="targ_file"/>
+        <input type="submit" value="解析">
+        <input type="reset" value="リセット">
       </form>
     </div>
     <h2>抽出後</h2>
-    <pre>
-    </pre>
+      {% if dictkeys.method != '' %}
+      <li>{{ dictkeys.method }}</li>
+      {% endif %}
+      {% for val in dictval %}
+      <h3>{{ val.key }}</h3>
+      <pre>{{ val.val }}</pre>
+      {% endfor %}
+      {% if changetxt != '' %}
+      <li>{{ changetxt }}</li>
+      {% endif %}
   </div>
 </body>
 </html>
