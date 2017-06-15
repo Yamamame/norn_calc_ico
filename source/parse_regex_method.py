@@ -25,22 +25,23 @@ if os.environ['REQUEST_METHOD'] == 'POST' :
 else :
     vd['method'] = 'GET'
 
-form = cgi.FieldStorage(rfile,)
+form = cgi.FieldStorage()
+formitem = []
 
 for key in form.keys() :
     vd[key]=form.getvalue(key,'')
-    if key == 'targ_file' :
-        chengetxt = form[key].file
-
-        # fout = file(os.path.join('/tmp', form[key].filename), 'wb')
-        # while True :
-        #     chunk = form[key].file.read(1000000)
-        #     if not chunk:
-        #         break
-        #     fout.write(chunk)
-        #     changetxt = changetxt + chunk
-        # fout.close()
-    v.append({ 'key':key , 'val':form[key].value })
+    if form[key].file:
+        # It's an uploaded file; count lines
+        formitem = form[key]
+        linecount = 0
+        while True:
+            line = formitem.file.readline()
+            if not line: break
+            linecount = linecount + 1
+            changetxt += line.decode("utf-8")
+        v.append({ 'key':'i' + key , 'val':formitem.filename })
+    else :
+        v.append({ 'key':'e' + key , 'val':form[key].value })
 
 #create HTMl
 env = Environment(loader=FileSystemLoader('./',encoding='utf8'))
@@ -51,4 +52,4 @@ html = tpl.render(
 print "Content-Type: text/html;charset=utf-8"
 print ""
 print html.encode('utf8')
-pprint(form, depth=2)
+# pprint(formitem, depth=1)
