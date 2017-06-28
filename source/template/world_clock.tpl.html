@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>pict</title></head>
+<link rel="stylesheet" type="text/css" media="screen" href="./css/opencv_test.css" />
+<body>
+  <div class="main">
+    <h1>時計</h1>    {% if message != '' %}
+    <h2>必要な時間一覧</h2>
+    <span>{{ message }}</span>    {% for val in atime %}
+    <li>:::{{ val.name }} ■ {{ val.date }} </li>    {% endfor %}    {% endif %}
+  </div>
+</body>
+</html>
