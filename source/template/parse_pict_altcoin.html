@@ -13,7 +13,6 @@
         <input type="file" name="targ_file"/>
         <input type="submit" value="解析">
         <input type="reset" value="リセット">
-        <input type="button" value="テスト" onclick="doubleHistory();">
       </form>
     </div>
     <h2>抽出後</h2>
@@ -22,7 +21,7 @@
       {% endif %}
       {% for val in dictval %}
       <h3>{{ val.key }}</h3>
-      <pre>{{ val.val }}</pre>
+      <dt>{{ val.val }}</dt><dd>{{ val.err }}</dd>
       {% endfor %}
       {% if changetxt != '' %}
       <pre>{{ changetxt }}</pre>
