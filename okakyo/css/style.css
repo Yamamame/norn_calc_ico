@@ -1,0 +1,33 @@
+@charset "utf-8"; /*utf-8の場合*/
+body {
+	color:#333;
+	line-height: 1.4em;
+	font-size:0.9em;
+	background-color: #ffffff;
+	margin-top: 1%;
+	margin-left: 2%;
+	margin-bottom: 1%;
+	margin-right: 2%;
+}
+#calendar {
+  background-color:#C1E0FF;
+  width           :100%;
+}
+
+#calendar td{
+  width     :14%;
+}
+#calendar th{
+  width     :14%;
+  background-color: #ffffe0;
+}
+
+.weekday {
+  text-align: center;
+}
+.sunday {
+  color: #FF0000;
+}
+.saturday{
+  color: #0000CC;
+}
