@@ -15,11 +15,11 @@ body {
 }
 
 #calendar td{
-  width     :14%;
+  width     :8%;
+	background-color: #ffffe0;
 }
 #calendar th{
-  width     :14%;
-  background-color: #ffffe0;
+  width     :8%;
 }
 
 .weekday {
