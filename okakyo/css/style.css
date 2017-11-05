@@ -14,6 +14,17 @@ body {
   width           :100%;
 }
 
+#calendar.detail{
+  width           :80%;
+}
+
+#calendar.detail th{
+    width     :20%;
+}
+#calendar.detail td{
+    width     :80%;
+}
+
 #calendar td{
   width     :8%;
 	background-color: #ffffe0;
