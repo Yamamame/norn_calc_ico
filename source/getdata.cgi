@@ -3,6 +3,7 @@
 #getdata.py
 #参考 : https://github.com/hitbtc-com/hitbtc-api/blob/master/example_rest.py
 import uuid
+import datetime
 import time
 import numpy as np
 import pandas as pd
@@ -17,6 +18,7 @@ class Client(object):
         self.url = url + "/api/2"
         self.session = requests.session()
         self.session.auth = (public_key, secret)
+        self.now     = datetime.date.today()
 
     def get_symbol(self, symbol_code):
         """Get symbol."""
@@ -28,6 +30,15 @@ class Client(object):
 
     def get_address(self, currency_code):
         return self.session.get("%s/account/crypto/address/%s" % (self.url, currency_code)).json()
+
+    def get_history_trades(self):
+        return self.session.get("%s/history/trades/" % (self.url)).json()
+
+    def get_history_trades_by_a_month(self):
+        month_ago = datetime.datetime.fromtimestamp(time.mktime((
+          self.now.year, self.now.month - 1,self.now.day,0,0,0,0,0,0)))
+        data = {'sort':"DESC", 'by':"timestamp", 'from':month_ago}
+        return self.session.get("%s/history/trades/" % (self.url),params=data).json()
 
     def get_account_balance(self):
         """Get main balance."""
@@ -85,3 +96,6 @@ if __name__ == "__main__":
   eth_btc = client.get_symbol('ETHBTC')
   address = client.get_address('ETH')     # get eth address for deposit
   print('ETH deposit address: "%s"' % address)
+  # history_trades = client.get_history_trades()
+  history_trades = client.get_history_trades_by_a_month()
+  print('history trades: "%s"' % history_trades)
