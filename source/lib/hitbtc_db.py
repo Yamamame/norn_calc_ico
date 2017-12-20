@@ -47,3 +47,11 @@ class HITBTCDB(object):
                 current_sql += ' ,volume=%s,fee=%s,rebate=%s,total=%s,uptime=now()'
                 current_sql += ' WHERE id=%s '
                 print('UPDATE OK %d' , data_row['id'])
+
+    def regist_balance_now_dict(self,account_data_dict,trading_data_dict):
+        for data_row in account_data_dict :
+            if float(data_row['available']) > 0 :
+                print('account balance: "%s"' % data_row)
+        for data_row in trading_data_dict :
+            if float(data_row['available']) > 0 :
+                print('trading balance: "%s"' % data_row)

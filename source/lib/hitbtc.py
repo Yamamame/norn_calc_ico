@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #coding: utf-8
 #hitbtc.py => class HITBTClient
+#参照: https://github.com/hitbtc-com/hitbtc-api/blob/master/example_rest.py
 import requests
 import datetime
 import time
@@ -31,6 +32,9 @@ class HITBTClient(object):
           self.now.year, self.now.month - 1,self.now.day,0,0,0,0,0,0)))
         data = {'sort':"DESC", 'by':"timestamp", 'from':month_ago}
         return self.session.get("%s/history/trades/" % (self.url),params=data).json()
+
+    def get_history_payment(self):
+        return self.session.get("%s/history/trades/" % (self.url)).json()
 
     def get_account_balance(self):
         """Get main balance."""
