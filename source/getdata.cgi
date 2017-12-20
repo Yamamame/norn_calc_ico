@@ -11,6 +11,7 @@ import matplotlib.pylab as plt
 import seaborn as sns
 import warnings
 import hitbtc
+import hitbtc_db
 
 data_dir = " ../../hitbtc/"
 api_pub_keys = "a98a09ed69db5faa37faeeeb47af4967"
@@ -24,3 +25,5 @@ print('ETH deposit address: "%s"' % address)
 # history_trades = client.get_history_trades()
 history_trades = client.get_history_trades_by_a_month()
 print('history trades: "%s"' % history_trades)
+db_access = hitbtc_db.HITBTCDB()
+db_access.regist_dict(history_trades)
