@@ -5,7 +5,10 @@
 #hitbtc_db : 取得したデータを格納するライブラリ
 #参照: https://github.com/hitbtc-com/hitbtc-api/blob/master/example_rest.py
 import sys
-sys.path.append('./lib/')
+import os
+current_path = os.getcwd()
+print current_path
+sys.path.append('/home/yama/public_html/py_practice/lib/')
 import numpy as np
 import pandas as pd
 import matplotlib.pylab as plt

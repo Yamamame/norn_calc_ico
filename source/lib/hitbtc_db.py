@@ -32,7 +32,7 @@ class HITBTCDB(object):
             self.cursor.execute(current_sql,placehold)
             data_one = self.cursor.fetchall()
             print len(data_one)
-            print('data row : "%s"' % data_row)
+            # print('data row : "%s"' % data_row)
             if len(data_one) == 0:
                 current_sql  = ' INSERT INTO t_trades '
                 current_sql += ' (exec_date,instrument,id'
@@ -47,6 +47,8 @@ class HITBTCDB(object):
                 current_sql += ' ,volume=%s,fee=%s,rebate=%s,total=%s,uptime=now()'
                 current_sql += ' WHERE id=%s '
                 print('UPDATE OK %d' , data_row['id'])
+        print('finish and commit ')
+        conn.commit()
 
     def regist_balance_now_dict(self,account_data_dict,trading_data_dict):
         for data_row in account_data_dict :
@@ -57,3 +59,5 @@ class HITBTCDB(object):
                 print('trading balance: "%s"' % data_row)
 
     def regist_transactions_dict(self,data_dict):
+        for data_row in data_dict :
+            print('transactions balance: "%s"' % data_row)

@@ -5,7 +5,7 @@
 #hitbtc_db : 取得したデータを格納するライブラリ
 #参照: https://github.com/hitbtc-com/hitbtc-api/blob/master/example_rest.py
 import sys
-sys.path.append('./lib/')
+sys.path.append('/home/yama/public_html/py_practice/lib/')
 import numpy as np
 import pandas as pd
 import matplotlib.pylab as plt
@@ -31,3 +31,4 @@ transaction     = client.get_transaction('')
 print('transaction: "%s"' % transaction)
 db_access = hitbtc_db.HITBTCDB()
 db_access.regist_balance_now_dict(account_balance,trading_balance)
+db_access.regist_transactions_dict(transaction)
