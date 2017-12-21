@@ -55,3 +55,5 @@ class HITBTCDB(object):
         for data_row in trading_data_dict :
             if float(data_row['available']) > 0 :
                 print('trading balance: "%s"' % data_row)
+
+    def regist_transactions_dict(self,data_dict):

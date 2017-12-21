@@ -81,3 +81,9 @@ class HITBTClient(object):
     def get_transaction(self, transaction_id):
         """Get transaction info."""
         return self.session.get("%s/account/transactions/%s" % (self.url, transaction_id)).json()
+
+    def get_transaction_by_a_month(self):
+        month_ago = datetime.datetime.fromtimestamp(time.mktime((
+          self.now.year, self.now.month - 1,self.now.day,0,0,0,0,0,0)))
+        data = {'sort':"DESC", 'by':"timestamp", 'from':month_ago}
+        return self.session.get("%s/account/transactions/" % (self.url),params=data).json()
