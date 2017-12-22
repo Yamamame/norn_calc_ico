@@ -72,13 +72,25 @@ try:
           row[3],row[4],row[5],row[6],
           row[7],row[8],row[9],row[10],
         )
-        cursor.execute(current_sql,placehold)
+        # cursor.execute(current_sql,placehold)
         print 'INSERT OK'
       else :
+        # current_sql  = ' UPDATE t_trades SET '
+        # current_sql += ' exec_date = %s,instrument=%s'
+        # current_sql += ' ,order_id=%s,side=%s,quantity=%s,price=%s'
+        # current_sql += ' ,volume=%s,fee=%s,rebate=%s,total=%s '
+        # current_sql += ' WHERE id=%s '
+        # placehold = (
+        #   row[0],row[1],
+        #   row[3],row[4],row[5],row[6],
+        #   row[7],row[8],row[9],row[10],
+        #   row[2],
+        # )
         current_sql  = ' UPDATE t_trades SET '
-        current_sql += ' exec_date = %s,instrument=%s'
-        current_sql += ' ,order_id=%s,side=%s,quantity=%s,price=%s'
-        current_sql += ' ,volume=%s,fee=%s,rebate=%s,total=%s '
+        # current_sql += ' exec_date = %s,instrument=%s'
+        # current_sql += ' ,order_id=%s,side=%s,quantity=%s,price=%s'
+        # current_sql += ' ,volume=%s,fee=%s,rebate=%s,total=%s '
+        current_sql += ' ,volume=%s,rebate=%s,total=%s '
         current_sql += ' WHERE id=%s '
         placehold = (
           row[0],row[1],

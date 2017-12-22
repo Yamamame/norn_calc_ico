@@ -27,6 +27,6 @@ address = client.get_address('ETH')     # get eth address for deposit
 print('ETH deposit address: "%s"' % address)
 # history_trades = client.get_history_trades()
 history_trades = client.get_history_trades_by_a_month()
-print('history trades: "%s"' % history_trades)
+# print('history trades: "%s"' % history_trades)
 db_access = hitbtc_db.HITBTCDB()
 db_access.regist_dict(history_trades)
