@@ -37,7 +37,7 @@ cursor = conn.cursor()
 #   sys.exit()
 try:
   data_dir = "../../hitbtc/"
-  data_filename = "trades.csv"
+  data_filename = "payment_history.csv"
   with open(data_dir + data_filename, 'r') as f:
     reader = csv.reader(f)
     # reader = csv.DictReader(f)
@@ -53,53 +53,52 @@ try:
       print header[0] + ':' + row[0] + '\t' +  header[2] + ':' + row[2]
       # print header[0] + ':' + row[header[0]]
       #登録されているかどうか確認
-      current_sql  = ' SELECT instrument,quantity,price,volume,fee,rebate,total FROM t_trades'
-      current_sql += ' WHERE id=%s '
-      placehold = (row[2],)
+      current_sql  = ' SELECT exec_date,operation_id_1,operation_id_2 FROM payment_history'
+      current_sql += ' WHERE operation_id_1=%s AND operation_id_2=%s AND operation_id_3=%s '
+      current_sql += ' AND operation_id_4=%s AND operation_id_5=%s ;'
+      placehold = (
+        row[1].split("-")[0], row[1].split("-")[1], row[1].split("-")[2],
+        row[1].split("-")[3], row[1].split("-")[4],
+      )
       cursor.execute(current_sql,placehold)
       data_one = cursor.fetchall()
       print len(data_one)
-
       #
       if len(data_one) == 0:
-        current_sql  = ' INSERT INTO t_trades '
-        current_sql += ' (exec_date,instrument,id'
-        current_sql += ' ,order_id,side,quantity,price'
-        current_sql += ' ,volume,fee,rebate,total)'
-        current_sql += ' VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
+        current_sql  = ' INSERT INTO payment_history '
+        current_sql += ' (exec_date,operation_id_1,operation_id_2,operation_id_3'
+        current_sql += ' ,operation_id_4,operation_id_5,type,amount'
+        current_sql += ' ,t_hash,main_balance,currency,uptime)'
+        current_sql += ' VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,now());'
         placehold = (
-          row[0],row[1],row[2],
-          row[3],row[4],row[5],row[6],
-          row[7],row[8],row[9],row[10],
-        )
-        # cursor.execute(current_sql,placehold)
-        print 'INSERT OK'
-      else :
-        # current_sql  = ' UPDATE t_trades SET '
-        # current_sql += ' exec_date = %s,instrument=%s'
-        # current_sql += ' ,order_id=%s,side=%s,quantity=%s,price=%s'
-        # current_sql += ' ,volume=%s,fee=%s,rebate=%s,total=%s '
-        # current_sql += ' WHERE id=%s '
-        # placehold = (
-        #   row[0],row[1],
-        #   row[3],row[4],row[5],row[6],
-        #   row[7],row[8],row[9],row[10],
-        #   row[2],
-        # )
-        current_sql  = ' UPDATE t_trades SET '
-        # current_sql += ' exec_date = %s,instrument=%s'
-        # current_sql += ' ,order_id=%s,side=%s,quantity=%s,price=%s'
-        # current_sql += ' ,volume=%s,fee=%s,rebate=%s,total=%s '
-        current_sql += ' volume=%s,rebate=%s,total=%s '
-        current_sql += ' WHERE id=%s '
-        placehold = (
-          # row[0],row[1],
-          # row[3],row[4],row[5],row[6],
-          # row[7],row[8],row[9],row[10],
-          row[7],row[9],row[10],
-          row[2],
+          row[0], row[1].split("-")[0], row[1].split("-")[1], row[1].split("-")[2],
+          row[1].split("-")[3], row[1].split("-")[4], row[2], row[3],
+          row[4], row[5], row[6],
         )
         cursor.execute(current_sql,placehold)
+        print 'INSERT OK'
+      else :
+        current_sql  = ' UPDATE payment_history SET '
+        current_sql += ' exec_date = %s '
+        current_sql += ' ,type=%s,amount=%s'
+        current_sql += ' ,t_hash=%s,main_balance=%s,currency=%s,uptime=now() '
+        current_sql += ' WHERE operation_id_1=%s AND operation_id_2=%s AND operation_id_3=%s '
+        current_sql += ' AND operation_id_4=%s AND operation_id_5=%s ;'
+        placehold = (
+          row[0],
+          row[2],row[3],
+          row[4],row[5],row[6],
+          row[1].split("-")[0], row[1].split("-")[1], row[1].split("-")[2],
+          row[1].split("-")[3], row[1].split("-")[4]
+        )
+        # current_sql  = ' UPDATE payment_history SET '
+        # current_sql += ' volume=%s,rebate=%s,total=%s '
+        # current_sql += ' WHERE id=%s '
+        # placehold = (
+        #   row[7],row[9],row[10],
+        #   row[2],
+        # )
+        # cursor.execute(current_sql,placehold)
         print 'UPDATE OK'
       conn.commit()
   #get all data

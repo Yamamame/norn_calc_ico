@@ -37,7 +37,9 @@ class HITBTCDB(object):
             print('data row : "%s"' % data_row)
             if len(data_one) == 0:
                 placehold = (
-                    data_row['timestamp'],data_row['symbol'],data_row['id'],
+                    data_row['timestamp'].translate(
+                    {ord(u'T'): u' ',ord(u'Z'): u' ',}
+                    ),data_row['symbol'],data_row['id'],
                     data_row['orderId'],data_row['side'],data_row['quantity'],data_row['price'],
                     data_row['fee'],
                 )
@@ -50,10 +52,14 @@ class HITBTCDB(object):
                 current_sql += ' VALUES (CONVERT_TZ(%s,"+00:00","+09:00"),%s,%s'
                 current_sql += ',%s,%s,%s,%s,%s,now())'
                 self.cursor.execute(current_sql,placehold)
-                print('INSERT OK %d' , data_row['id'])
+                result = self.cursor.fetchall()
+                # print('xINSERT OK : "%s"' % result)
+                print('this INSERT OK %d' , data_row['id'])
             else :
                 placehold = (
-                    data_row['timestamp'],data_row['symbol'],
+                    data_row['timestamp'].translate(
+                    {ord(u'T'): u' ',ord(u'Z'): u' ',}
+                    ),data_row['symbol'],
                     data_row['orderId'],data_row['side'],data_row['quantity'],data_row['price'],
                     data_row['fee'],
                     data_row['id'],
@@ -65,7 +71,9 @@ class HITBTCDB(object):
                 current_sql += ' ,fee=%s,uptime=now()'
                 current_sql += ' WHERE id=%s '
                 self.cursor.execute(current_sql,placehold)
-                print('UPDATE OK %d' , data_row['id'])
+                result = self.cursor.fetchall()
+                # print('sUPDATE OK : "%s"' % result)
+                print('this UPDATE OK %d' , data_row['id'])
         print('finish and commit ')
         self.conn.commit()
 
