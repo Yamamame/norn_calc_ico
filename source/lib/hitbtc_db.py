@@ -87,4 +87,82 @@ class HITBTCDB(object):
 
     def regist_transactions_dict(self,data_dict):
         for data_row in data_dict :
+            # 現在存在するかどうかチェック
+            current_sql  = ' SELECT t_hash FROM payment_history '
+            current_sql += ' WHERE operation_id_1=%s AND operation_id_2=%s AND operation_id_3=%s '
+            current_sql += ' AND operation_id_4=%s AND operation_id_5=%s ;'
+            placehold = (
+                  data_row['id'].split("-")[0], data_row['id'].split("-")[1], data_row['id'].split("-")[2],
+                  data_row['id'].split("-")[3], data_row['id'].split("-")[4],
+            )
+            self.cursor.execute(current_sql,placehold)
+            data_one = self.cursor.fetchall()
+            print len(data_one)
             print('transactions balance: "%s"' % data_row)
+            if len(data_one) == 0:
+                current_sql  = ' INSERT INTO payment_history '
+                current_sql += ' (exec_date,operation_id_1,operation_id_2,operation_id_3'
+                current_sql += ' ,operation_id_4,operation_id_5,type,amount'
+                if 'hash' not in data_row :
+                    # hashのkeyはないことがある
+                    current_sql += ' ,currency,uptime)'
+                    current_sql += ' VALUES (CONVERT_TZ(%s,"+00:00","+09:00"),'
+                    current_sql += '%s,%s,%s,'
+                    current_sql += '%s,%s,%s,%s,'
+                    current_sql += '%s,now());'
+                    placehold = (
+                      data_row['updatedAt'].translate(
+                      {ord(u'T'): u' ',ord(u'Z'): u' ',}
+                      ),
+                      data_row['id'].split("-")[0], data_row['id'].split("-")[1], data_row['id'].split("-")[2],
+                      data_row['id'].split("-")[3], data_row['id'].split("-")[4], data_row['type'], data_row['amount'],
+                      data_row['currency'],
+                    )
+                    self.cursor.execute(current_sql,placehold)
+                else :
+                    current_sql += ' ,t_hash,currency,uptime)'
+                    current_sql += ' VALUES (CONVERT_TZ(%s,"+00:00","+09:00"),%s,%s,%s,%s,%s,%s,%s,%s,%s,now());'
+                    placehold = (
+                      data_row['updatedAt'].translate(
+                      {ord(u'T'): u' ',ord(u'Z'): u' ',}
+                      ), data_row['id'].split("-")[0], data_row['id'].split("-")[1], data_row['id'].split("-")[2],
+                      data_row['id'].split("-")[3], data_row['id'].split("-")[4], data_row['type'], data_row['amount'],
+                      data_row['hash'], data_row['currency'],
+                    )
+                    self.cursor.execute(current_sql,placehold)
+                print 'INSERT OK'
+            else :
+                current_sql  = ' UPDATE payment_history SET '
+                current_sql += ' exec_date = CONVERT_TZ(%s,"+00:00","+09:00") '
+                current_sql += ' ,type=%s,amount=%s'
+                if 'hash' not in data_row :
+                    # hashのkeyはないことがある
+                    current_sql += ' ,currency=%s,uptime=now() '
+                    current_sql += ' WHERE operation_id_1=%s AND operation_id_2=%s AND operation_id_3=%s '
+                    current_sql += ' AND operation_id_4=%s AND operation_id_5=%s ;'
+                    placehold = (
+                      data_row['updatedAt'].translate(
+                      {ord(u'T'): u' ',ord(u'Z'): u' ',}
+                      ),
+                      data_row['type'],data_row['amount'],
+                      data_row['currency'],
+                      data_row['id'].split("-")[0], data_row['id'].split("-")[1], data_row['id'].split("-")[2],
+                      data_row['id'].split("-")[3], data_row['id'].split("-")[4]
+                    )
+                else:
+                    current_sql += ' ,t_hash=%s,currency=%s,uptime=now() '
+                    current_sql += ' WHERE operation_id_1=%s AND operation_id_2=%s AND operation_id_3=%s '
+                    current_sql += ' AND operation_id_4=%s AND operation_id_5=%s ;'
+                    placehold = (
+                      data_row['updatedAt'].translate(
+                      {ord(u'T'): u' ',ord(u'Z'): u' ',}
+                      ),
+                      data_row['type'],data_row['amount'],
+                      data_row['hash'],data_row['currency'],
+                      data_row['id'].split("-")[0], data_row['id'].split("-")[1], data_row['id'].split("-")[2],
+                      data_row['id'].split("-")[3], data_row['id'].split("-")[4]
+                    )
+
+                self.cursor.execute(current_sql,placehold)
+                print 'UPDATE OK'
+            self.conn.commit()

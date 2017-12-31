@@ -98,7 +98,7 @@ try:
         #   row[7],row[9],row[10],
         #   row[2],
         # )
-        # cursor.execute(current_sql,placehold)
+        cursor.execute(current_sql,placehold)
         print 'UPDATE OK'
       conn.commit()
   #get all data
