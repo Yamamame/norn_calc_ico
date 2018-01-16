@@ -85,6 +85,17 @@ class HITBTCDB(object):
             if float(data_row['available']) > 0 :
                 print('trading balance: "%s"' % data_row)
 
+    def calculate_current_price(self,instrument):
+        #一つの銘柄の現在価格を計算
+        current_sql  = ' SELECT price,quantity FROM t_trades '
+        current_sql += ' WHERE uptime > (now() - INTERVAL 3 month) AND  instrument like "%s%%" '
+        placehold = (
+            instrument,
+        )
+        print current_sql
+        self.cursor.execute(current_sql,placehold)
+        data_one = self.cursor.fetchall()
+
     def regist_transactions_dict(self,data_dict):
         for data_row in data_dict :
             # 現在存在するかどうかチェック
