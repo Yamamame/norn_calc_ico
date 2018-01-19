@@ -49,8 +49,8 @@ try:
 
     for row in reader:
       # print row
-      # print row[1]
-      print header[0] + ':' + row[0] + '\t' +  header[2] + ':' + row[2]
+      row[8] = str(float(row[8]) - float(row[9]))
+      print header[0] + ':' + row[0] + '\t' +  header[2] + ':' + row[2] + ':' + row[8] + ':' + str(float(row[9]))
       # print header[0] + ':' + row[header[0]]
       #登録されているかどうか確認
       current_sql  = ' SELECT instrument,quantity,price,volume,fee,rebate,total FROM t_trades'
@@ -59,13 +59,13 @@ try:
       cursor.execute(current_sql,placehold)
       data_one = cursor.fetchall()
       print len(data_one)
-
+      #rebateは-のfeeという考え方に変更
       #
       if len(data_one) == 0:
         current_sql  = ' INSERT INTO t_trades '
         current_sql += ' (exec_date,instrument,id'
         current_sql += ' ,order_id,side,quantity,price'
-        current_sql += ' ,volume,fee,rebate,total)'
+        current_sql += ' ,volume,fee,total)'
         current_sql += ' VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
         placehold = (
           row[0],row[1],row[2],
@@ -90,13 +90,13 @@ try:
         # current_sql += ' exec_date = %s,instrument=%s'
         # current_sql += ' ,order_id=%s,side=%s,quantity=%s,price=%s'
         # current_sql += ' ,volume=%s,fee=%s,rebate=%s,total=%s '
-        current_sql += ' volume=%s,rebate=%s,total=%s '
+        current_sql += ' volume=%s,total=%s,uptime=now() '
         current_sql += ' WHERE id=%s '
         placehold = (
           # row[0],row[1],
           # row[3],row[4],row[5],row[6],
           # row[7],row[8],row[9],row[10],
-          row[7],row[9],row[10],
+          row[7],row[10],
           row[2],
         )
         cursor.execute(current_sql,placehold)
