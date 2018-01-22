@@ -5,6 +5,9 @@
 #hitbtc_db : 取得したデータを格納するライブラリ
 #参照: https://github.com/hitbtc-com/hitbtc-api/blob/master/example_rest.py
 import sys
+import os
+current_path = os.getcwd()
+print current_path
 sys.path.append('/home/yama/public_html/py_practice/lib/')
 import numpy as np
 import pandas as pd
@@ -23,12 +26,8 @@ eth_btc = client.get_symbol('ETHBTC')
 address = client.get_address('ETH')     # get eth address for deposit
 print('ETH deposit address: "%s"' % address)
 # history_trades = client.get_history_trades()
-account_balance = client.get_account_balance()
-trading_balance = client.get_trading_balance()
-transaction     = client.get_transaction('')
-# transaction     = client.get_transaction_by_a_month('')
-# print('account balance: "%s"' % account_balance)
-# print('transaction: "%s"' % transaction)
+all_trades_balance = client.get_trading_balance()
 db_access = hitbtc_db.HITBTCDB()
-db_access.regist_transactions_dict(transaction)
-db_access.trading_balance_and_average(trading_balance)
+
+print('history trades: "%s"' % trades_balance)
+# db_access.regist_dict(history_trades)
