@@ -14,9 +14,14 @@ import warnings
 import hitbtc
 import hitbtc_db
 
-data_dir = " ../../hitbtc/"
-api_pub_keys = "a98a09ed69db5faa37faeeeb47af4967"
-api_sec_keys = "8066b231b7b50e626b020ed5c593170b"
+data_dir = "/home/yama//hitbtc/"
+f = open(data_dir + 'apikey.txt', 'r')
+for line in f :
+    strkeydict = line.split(None)
+    if 'API' in strkeydict[0] :
+      api_pub_keys = strkeydict[1]
+    else :
+      api_sec_keys = strkeydict[1]
 target_rest_url  = "https://api.hitbtc.com"
 client = hitbtc.HITBTClient(target_rest_url, api_pub_keys, api_sec_keys)
 eth_btc = client.get_symbol('ETHBTC')
