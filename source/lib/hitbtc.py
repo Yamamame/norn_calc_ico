@@ -24,6 +24,11 @@ class HITBTClient(object):
     def get_address(self, currency_code):
         return self.session.get("%s/account/crypto/address/%s" % (self.url, currency_code)).json()
 
+    def get_candles(self, symbols="ETHBTC"):
+        print ("%s/public/candles/%s" % (self.url, symbols))
+        print self.session.get("%s/public/candles/%s" % (self.url, symbols))
+        return self.session.get("%s/public/candles/%s" % (self.url, symbols)).json()
+
     def get_history_trades(self):
         return self.session.get("%s/history/trades/" % (self.url)).json()
 

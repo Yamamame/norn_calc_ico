@@ -94,6 +94,39 @@ class HITBTCDB(object):
             if float(data_row['available']) > 0 :
                 print('trading balance: "%s"' % data_row)
 
+    def regist_candles(self,set_symbols,data_dict,debug=0):
+        for data_row in data_dict :
+            # 現在存在するかどうかチェック
+            current_sql  = ' SELECT symbols FROM trade_candles'
+            current_sql += ' WHERE symbols=%s AND timestamp=CONVERT_TZ(%s,"+00:00","+09:00") ;'
+            placehold = (
+                set_symbols,
+                data_row['timestamp'].translate({ord(u'T'): u' ',ord(u'Z'): u' ',}),
+            )
+            self.cursor.execute(current_sql,placehold)
+            data_one = self.cursor.fetchall()
+            if len(data_one) == 0:
+                placehold = (
+                    data_row['timestamp'].translate(
+                    {ord(u'T'): u' ',ord(u'Z'): u' ',}
+                    ),set_symbols,data_row['min'],
+                    data_row['max'],data_row['open'],data_row['close'],
+                    data_row['volume'],data_row['volumeQuote'],
+                )
+                current_sql  = ' INSERT INTO trade_candles '
+                current_sql += ' (timestamp,symbols,min'
+                current_sql += ' ,max,open,close'
+                current_sql += ' ,volume,volumequote,uptime)'
+                current_sql += ' VALUES (CONVERT_TZ(%s,"+00:00","+09:00"),%s,%s'
+                current_sql += ',%s,%s,%s,%s,%s,now())'
+                self.cursor.execute(current_sql,placehold)
+                result = self.cursor.fetchall()
+                if debug != 0 :
+                    print('this INSERT OK %d' , data_row['id'])
+            if debug != 0 :
+                print('finish and commit ')
+        self.conn.commit()
+
     def trading_balance_and_average(self,trading_data_dict):
         for data_row in trading_data_dict :
             if float(data_row['available']) > 0 :
