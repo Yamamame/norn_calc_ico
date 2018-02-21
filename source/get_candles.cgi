@@ -33,6 +33,9 @@ address = client.get_address('ETH')     # get eth address for deposit
 print('ETH deposit address: "%s"' % address)
 # history_trades = client.get_history_trades()
 current_symbols="ETHBTC"
-candles = client.get_candles(current_symbols)
-# print('candles: "%s"' % candles)
-db_access.regist_candles(current_symbols,candles)
+used_symbols = db_access.get_used_symbols(1)
+for current_symbols in used_symbols :
+  print ('ETH deposit address: "%s"' % current_symbols)
+  candles = client.get_candles(current_symbols[0])
+  # print('candles: "%s"' % candles)
+  db_access.regist_candles(current_symbols,candles)

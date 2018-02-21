@@ -23,6 +23,13 @@ class HITBTCDB(object):
         )
         self.cursor = self.conn.cursor()
 
+    def get_used_symbols(self,debug=0):
+        # 現在までに売買履歴のあるsymbolを取得
+        #select instrument,side,sum(total) from t_trades GROUP BY instrument,side;
+        current_sql  = ' SELECT instrument FROM t_trades  GROUP BY instrument'
+        self.cursor.execute(current_sql)
+        data_one = self.cursor.fetchall()
+        return data_one
     def regist_dict(self,data_dict,debug = 0):
         for data_row in data_dict :
             # 現在存在するかどうかチェック
