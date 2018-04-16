@@ -39,7 +39,7 @@ class HITBTCDB(object):
             else :
                 data_row['total']  = str((float(data_row['volume']) * 1) - float(data_row['fee']))
             if debug != 0 :
-                print len(data_one)
+                print (len(data_one))
                 print('data row : "%s"' % data_row)
             if len(data_one) == 0:
                 placehold = (
@@ -59,7 +59,7 @@ class HITBTCDB(object):
                 current_sql += ',%s,%s,%s,%s,%s,%s,%s,now())'
                 self.cursor.execute(current_sql,placehold)
                 result = self.cursor.fetchall()
-                # print('xINSERT OK : "%s"' % result)
+                print('xINSERT OK : "%s"' % result)
                 if debug != 0 :
                     print('this INSERT OK %d' , data_row['id'])
             else :
@@ -101,24 +101,25 @@ class HITBTCDB(object):
                 print('trading balance: "%s"' % data_row['currency'])
                 print('      available: "%s"' % data_row['available'])
                 average_value = self.calculate_current_price(data_row['currency'])
-                # print('        average: "%s"' % data_row['currency'])
+                print('        average: "%s"' % average_value)
                 print(' ')
 
     def calculate_current_price(self,instrument):
         #一つの銘柄の現在価格を計算
-        average_value = 0.00;
+        average_value = 0.00
         instrument = '%' + instrument + '%'
         current_sql  = ' SELECT count(order_id),instrument FROM t_trades '
         current_sql += ' WHERE instrument like %s GROUP BY instrument ORDER BY count(order_id) DESC'
 
-        current_sql  = ' SELECT price,quantity FROM t_trades '
-        current_sql += ' WHERE uptime > (now() - INTERVAL 12 month) AND  instrument like %s '
+        ###これで平均値になるか? -> sellとbuyが区別できていない
+        current_sql  = ' SELECT instrument,avg(price),avg(quantity) FROM t_trades '
+        current_sql += ' WHERE uptime > (now() - INTERVAL 1 month) AND  instrument like %s GROUP BY instrument;'
         # current_sql += ' WHERE uptime > (now() - INTERVAL 12 month)  '
         placehold = (
             instrument,
         )
-        print current_sql
-        print instrument
+        print (current_sql)
+        print (instrument)
         self.cursor.execute(current_sql,placehold)
         # self.cursor.execute(current_sql)
         data_dict = self.cursor.fetchall()
@@ -126,6 +127,28 @@ class HITBTCDB(object):
             print('calc    price: "%s" ' % str(data_row[0]))
             print('calc quantity: "%s" ' % str(data_row[1]))
         return average_value
+
+    ###前回のトレードを取得
+    def pre_trade_value(self,instrument='ETH',debug = 0):
+        instrument = '%' + instrument + '%'
+        current_sql  = ' SELECT t_a.instrument,t_a.price,t_a.quantity FROM t_trades as t_a '
+        current_sql += ' INNER JOIN ('
+        current_sql += '     SELECT instrument,min(exec_date) as exec_date FROM t_trades '
+        current_sql += '     WHERE instrument like %s GROUP BY instrument '
+        current_sql += ' ) as t_b '
+        current_sql += ' ON  t_a.instrument = t_b.instrument '
+        current_sql += ' AND t_a.exec_date  = t_b.exec_date ; '
+        placehold = (
+            instrument,
+        )
+        # print (current_sql)
+        # print (instrument)
+        self.cursor.execute(current_sql,placehold)
+        data_dict = self.cursor.fetchall()
+        # for data_row in data_dict :
+        #     print('calc    price: "%s" ' % str(data_row[0]))
+        #     print('calc quantity: "%s" ' % str(data_row[1]))
+        return data_dict
 
     def regist_transactions_dict(self,data_dict,debug = 0):
         for data_row in data_dict :
@@ -140,7 +163,7 @@ class HITBTCDB(object):
             self.cursor.execute(current_sql,placehold)
             data_one = self.cursor.fetchall()
             if debug != 0 :
-                print len(data_one)
+                print (len(data_one))
                 print('transactions balance: "%s"' % data_row)
             if len(data_one) == 0:
                 current_sql  = ' INSERT INTO payment_history '
@@ -174,7 +197,7 @@ class HITBTCDB(object):
                     )
                     self.cursor.execute(current_sql,placehold)
                 if debug != 0 :
-                    print 'INSERT OK'
+                    print ('INSERT OK')
             else :
                 current_sql  = ' UPDATE payment_history SET '
                 current_sql += ' exec_date = CONVERT_TZ(%s,"+00:00","+09:00") '
@@ -209,5 +232,5 @@ class HITBTCDB(object):
 
                 self.cursor.execute(current_sql,placehold)
                 if debug != 0 :
-                    print 'UPDATE OK'
+                    print ('UPDATE OK')
             self.conn.commit()
