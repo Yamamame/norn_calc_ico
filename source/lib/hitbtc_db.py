@@ -127,7 +127,7 @@ class HITBTCDB(object):
                 current_sql += ' VALUES (CONVERT_TZ(%s,"+00:00","+09:00"),%s,%s'
                 current_sql += ',%s,%s,%s,%s,%s,now())'
                 self.cursor.execute(current_sql,placehold)
-                result = self.cursor.fetchall()
+                # result = self.cursor.fetchall()
                 if debug != 0 :
                     print('this INSERT OK %d' , data_row['id'])
             if debug != 0 :
@@ -143,6 +143,22 @@ class HITBTCDB(object):
                 average_value = self.calculate_current_price(data_row['currency'])
                 print('        average: "%s"' % average_value)
                 print(' ')
+
+    def get_recently_price(self,instrument):
+        instrument = '%' + instrument + '%'
+        current_sql  = ' select tca.symbols,min,max,open,close,volume,tca.timestamp from trade_candles tca '
+        current_sql += ' INNER JOIN ( '
+        current_sql += '     select symbols,max(timestamp) as timestamp from trade_candles '
+        current_sql += '     WHERE symbols like %s GROUP BY symbols '
+        current_sql += ' ) tcb '
+        current_sql += ' ON tca.symbols = tcb.symbols AND tca.timestamp = tcb.timestamp '
+        placehold = (
+            instrument,
+        )
+        # print (current_sql)
+        self.cursor.execute(current_sql,placehold)
+        data_dict = self.cursor.fetchall()
+        return data_dict
 
     def calculate_current_price(self,instrument):
         #一つの銘柄の現在価格を計算
@@ -171,12 +187,13 @@ class HITBTCDB(object):
     ###前回のトレードを取得
     def pre_trade_value(self,instrument='ETH',debug = 0):
         instrument = '%' + instrument + '%'
-        current_sql  = ' SELECT t_a.instrument,t_a.price,t_a.quantity FROM t_trades as t_a '
+        current_sql  = ' SELECT t_a.instrument,t_a.price,t_a.quantity,t_a.side FROM t_trades as t_a '
         current_sql += ' INNER JOIN ('
-        current_sql += '     SELECT instrument,min(exec_date) as exec_date FROM t_trades '
-        current_sql += '     WHERE instrument like %s GROUP BY instrument '
+        current_sql += '     SELECT instrument,side,max(exec_date) as exec_date FROM t_trades '
+        current_sql += '     WHERE instrument like %s GROUP BY instrument,side '
         current_sql += ' ) as t_b '
         current_sql += ' ON  t_a.instrument = t_b.instrument '
+        current_sql += ' AND t_a.side  = t_b.side  '
         current_sql += ' AND t_a.exec_date  = t_b.exec_date ; '
         placehold = (
             instrument,
