@@ -7,7 +7,7 @@
 import sys
 import os
 current_path = os.getcwd()
-print current_path
+print (current_path)
 sys.path.append('/home/yama/public_html/py_practice/lib/')
 import numpy as np
 import pandas as pd

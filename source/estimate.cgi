@@ -50,7 +50,7 @@ try:
     for row in reader:
       # print row
       row[8] = str(float(row[8]) - float(row[9]))
-      print header[0] + ':' + row[0] + '\t' +  header[2] + ':' + row[2] + ':' + row[8] + ':' + str(float(row[9]))
+      print (header[0] + ':' + row[0] + '\t' +  header[2] + ':' + row[2] + ':' + row[8] + ':' + str(float(row[9])))
       # print header[0] + ':' + row[header[0]]
       #登録されているかどうか確認
       current_sql  = ' SELECT instrument,quantity,price,volume,fee,rebate,total FROM t_trades'
@@ -58,7 +58,7 @@ try:
       placehold = (row[2],)
       cursor.execute(current_sql,placehold)
       data_one = cursor.fetchall()
-      print len(data_one)
+      print (len(data_one))
       #rebateは-のfeeという考え方に変更
       #
       if len(data_one) == 0:
@@ -73,7 +73,7 @@ try:
           row[7],row[8],row[9],row[10],
         )
         # cursor.execute(current_sql,placehold)
-        print 'INSERT OK'
+        print ('INSERT OK')
       else :
         # current_sql  = ' UPDATE t_trades SET '
         # current_sql += ' exec_date = %s,instrument=%s'
@@ -100,7 +100,7 @@ try:
           row[2],
         )
         cursor.execute(current_sql,placehold)
-        print 'UPDATE OK'
+        print ('UPDATE OK')
       conn.commit()
   #get all data
   current_sql = 'SELECT instrument,quantity,price,volume,fee,rebate,total FROM t_trades'

@@ -26,7 +26,7 @@ class HITBTClient(object):
 
     def get_candles(self, symbols="ETHBTC"):
         print ("%s/public/candles/%s" % (self.url, symbols))
-        print self.session.get("%s/public/candles/%s" % (self.url, symbols))
+        print (self.session.get("%s/public/candles/%s" % (self.url, symbols)))
         return self.session.get("%s/public/candles/%s" % (self.url, symbols)).json()
 
     def get_history_trades(self):
