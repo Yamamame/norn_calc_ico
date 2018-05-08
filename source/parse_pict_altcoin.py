@@ -75,7 +75,7 @@ tpl = env.get_template(template_filename)
 html = tpl.render(
     {'message':msg,'changetxt':changetxt,'rect':status,'dictkeys':vd,'dictval':v}
     )
-print "Content-Type: text/html;charset=utf-8"
-print ""
-print html.encode('utf8')
+print ("Content-Type: text/html;charset=utf-8")
+print ("")
+print (html.encode('utf8'))
 # pprint(formitem, depth=1)
