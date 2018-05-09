@@ -41,7 +41,7 @@ for trading_row in trading_balance :
     now_quantity   = data_row[2]
     now_instrument = str(data_row[0])
     if debug == 1 :
-      print( 'instrument: "{0}" price : "{1: 4.8f}"  quantity : "{2: 4.8f}" side : "{3:5}" '.format(
+      print( 'instrument: "{0}" side : "{3:5}" price : "{1: 4.8f}"  quantity : "{2: 4.8f}" '.format(
         now_instrument,data_row[1],now_quantity,data_row[3]))
     res = db_access.get_recently_price(str(data_row[0]))
     for res_row in res :
@@ -51,31 +51,23 @@ for trading_row in trading_balance :
       for_side = ""
       # symbols,min,max,open,close,volume,timestamp
       # print('instrument: "%s" ' % (res_row[0]))
-      if data_row[3] == "sell" :
+      if data_row[3] == "sell" and :
         for_side = "for buy"
         diff_val =  data_row[1] - (res_row[2] * 1.02)
       else :
         for_side = "for sell"
         diff_val = (res_row[1] * 0.98)- data_row[1]
-        trading_price = (now_quantity ) * ((res_row[1] * 0.98)- data_row[1])
-        trading_merit = (now_quantity ) * ((res_row[1] * 0.98)- data_row[1])
+        trading_price = (now_quantity ) * ((res_row[1] * 1.02)- data_row[1])
+        trading_merit = (now_quantity ) * ((res_row[1] * 1.02)- data_row[1])
       if debug == 1 :
-        print(
-          'instrument: {0} min   : "{1: 4.8f}"  max  : "{2: 4.8f}" ------------> {3:8} diff : "{4: 4.8f}" merit {5: 4.8f}'.format(
-            res_row[0],res_row[1],res_row[2],for_side,diff_val,trading_merit
-          )
-        )
+        print('instrument: "{0}" min   : "{1: 4.8f}"  max  : "{2: 4.8f}"'.format(res_row[0],res_row[1],res_row[2],))
+        print(' ------------> {0:8} diff : {1: 4.8f} merit {2: 4.8f}"'.format(for_side,diff_val,trading_merit))
       if trading_merit > 0.0 and float(trading_row['available']) > now_quantity:
         print( '!=^=^=^=^==============trading===sell={0}================================='.format(cur_currency))
-        print( 
-          '!=^= instrument: {0} quantity : {1: 4.8f} aveilable : {2} recently trade : {3: 4.8f} trading merit {4: 4.8f} ==='.format(
-            now_instrument,now_quantity,trading_row['available'],data_row[1],trading_price
-          )
-        )
-        print( 
-          '!=^= min   : "{0: 4.8f}"  max  : "{1: 4.8f}" ------------> timestamp {2:%Y-%m-%d %H:%M:%S}'.format(
-            res_row[1],res_row[2],res_row[6]
-          )
-        )
+        print( '!=^= instrument: {0} quantity : {1: 4.8f} aveilable : {2} recently trade : {3: 4.8f} ==='.format(
+            now_instrument,now_quantity,trading_row['available'],data_row[1]
+        ))
+        print('!=^= min   : "{0: 4.8f}"  max  : "{1: 4.8f}"  trading merit {2: 4.8f} ==='.format(res_row[1],res_row[2],trading_price))
+        print ("!------------> timestamp {0:%Y-%m-%d %H:%M:%S}".format(res_row[6]))
         print( '!=^=^=^=^===========================================================')
 

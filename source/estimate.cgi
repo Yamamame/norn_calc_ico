@@ -9,6 +9,8 @@ import seaborn as sns
 import warnings
 import sys
 import csv
+current_path = os.getcwd()
+sys.path.append('/home/yama/public_html/py_practice/lib/')
 #mysql接続関連
 #from urllib.parse import urlparse
 #from furl import furl
@@ -36,7 +38,7 @@ cursor = conn.cursor()
 # if conn.is_connected() == False :
 #   sys.exit()
 try:
-  data_dir = "../../hitbtc/"
+  data_dir = os.path.dirname(os.path.abspath(__file__)) + "/../..//hitbtc/"
   data_filename = "trades.csv"
   with open(data_dir + data_filename, 'r') as f:
     reader = csv.reader(f)

@@ -7,7 +7,6 @@
 import sys
 import os
 current_path = os.getcwd()
-print (current_path)
 sys.path.append('/home/yama/public_html/py_practice/lib/')
 import numpy as np
 import pandas as pd
@@ -17,7 +16,7 @@ import warnings
 import hitbtc
 import hitbtc_db
 
-data_dir = "/home/yama//hitbtc/"
+data_dir = "/home/yama/hitbtc/"
 f = open(data_dir + 'apikey.txt', 'r')
 for line in f :
     strkeydict = line.split(None)
