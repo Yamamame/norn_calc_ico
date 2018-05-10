@@ -50,7 +50,7 @@ try:
     for row in reader:
       # print row
       # print row[1]
-      print header[0] + ':' + row[0] + '\t' +  header[2] + ':' + row[2]
+      print(header[0] + ':' + row[0] + '\t' +  header[2] + ':' + row[2])
       # print header[0] + ':' + row[header[0]]
       #登録されているかどうか確認
       current_sql  = ' SELECT exec_date,operation_id_1,operation_id_2 FROM payment_history'
@@ -62,7 +62,7 @@ try:
       )
       cursor.execute(current_sql,placehold)
       data_one = cursor.fetchall()
-      print len(data_one)
+      print (len(data_one))
       #
       if len(data_one) == 0:
         current_sql  = ' INSERT INTO payment_history '
@@ -76,7 +76,7 @@ try:
           row[4], row[5], row[6],
         )
         cursor.execute(current_sql,placehold)
-        print 'INSERT OK'
+        print ('INSERT OK')
       else :
         current_sql  = ' UPDATE payment_history SET '
         current_sql += ' exec_date = %s '
@@ -99,7 +99,7 @@ try:
         #   row[2],
         # )
         cursor.execute(current_sql,placehold)
-        print 'UPDATE OK'
+        print ('UPDATE OK')
       conn.commit()
   #get all data
   current_sql = 'SELECT instrument,quantity,price,volume,fee,rebate,total FROM t_trades'

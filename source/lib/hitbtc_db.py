@@ -65,8 +65,7 @@ class HITBTCDB(object):
                 current_sql += ' VALUES (CONVERT_TZ(%s,"+00:00","+09:00"),%s,%s'
                 current_sql += ',%s,%s,%s,%s,%s,%s,%s,now())'
                 self.cursor.execute(current_sql,placehold)
-                result = self.cursor.fetchall()
-                print('xINSERT OK : "%s"' % result)
+                self.cursor.fetchall()
                 if debug != 0 :
                     print('this INSERT OK %d' , data_row['id'])
             else :
@@ -85,7 +84,7 @@ class HITBTCDB(object):
                 current_sql += ' ,volume=%s,fee=%s,total=%s,uptime=now()'
                 current_sql += ' WHERE id=%s '
                 self.cursor.execute(current_sql,placehold)
-                result = self.cursor.fetchall()
+                self.cursor.fetchall()
                 # print('sUPDATE OK : "%s"' % result)
                 if debug != 0 :
                     print('this UPDATE OK %d' , data_row['id'])
@@ -174,14 +173,15 @@ class HITBTCDB(object):
         placehold = (
             instrument,
         )
-        print (current_sql)
-        print (instrument)
+        # print (current_sql)
+        # print (instrument)
         self.cursor.execute(current_sql,placehold)
         # self.cursor.execute(current_sql)
         data_dict = self.cursor.fetchall()
         for data_row in data_dict :
-            print('calc    price: "%s" ' % str(data_row[0]))
-            print('calc quantity: "%s" ' % str(data_row[1]))
+            print('calc instrument: "{0:10s}" '.format(data_row[0]))
+            print('calc      price: "{0:10s}" '.format(data_row[1]))
+            print('calc   quantity: "{0: 4.10f}" '.format(data_row[2]))
         return average_value
 
     ###前回のトレードを取得
