@@ -2,6 +2,7 @@
 #coding: utf-8
 #hitbtc_db.py => class HITBTCDB
 import MySQLdb
+import datetime
 
 class HITBTCDB(object):
     def __init__(self):
@@ -142,6 +143,25 @@ class HITBTCDB(object):
                 average_value = self.calculate_current_price(data_row['currency'])
                 print('        average: "%s"' % average_value)
                 print(' ')
+
+    def get_recent_period(self,instrument='ETH',span_end=0,span_start=3):
+        instrument = '%' + instrument + '%'
+        # 今日の分を含めるため予め+1しておく
+        nowdate   = datetime.date.today() + datetime.timedelta(days=1)
+        startdate = nowdate + datetime.timedelta(days=30 * span_start)
+        enddate   = nowdate + datetime.timedelta(days=30 * span_end)
+        current_sql  = ' select symbols,timestamp ,min,max,open,close,volume from trade_candles tca '
+        current_sql += ' WHERE symbols like %s AND timestamp BETWEEN %s AND %s '
+        current_sql += ' ORDER BY symbols,timestamp '
+        placehold = (
+            instrument,
+            startdate,
+            enddate,
+        )
+        # print (current_sql)
+        self.cursor.execute(current_sql,placehold)
+        data_dict = self.cursor.fetchall()
+        return data_dict
 
     def get_recently_price(self,instrument):
         instrument = '%' + instrument + '%'
