@@ -11,6 +11,7 @@ import pandas as pd
 import matplotlib.pylab as plt
 import seaborn as sns
 import warnings
+import re
 import hitbtc
 import hitbtc_db
 
@@ -33,9 +34,9 @@ for trading_row in trading_balance :
   if float(trading_row['available']) == 0.0 :
     continue
   cur_currency = trading_row['currency']
-  print( '==============================={0}================================='.format(cur_currency))
-  print( '=== {0} ==='.format(trading_row) )
-  print( '===================================================================')
+  print( '!==============================={0}================================='.format(cur_currency))
+  print( '!=== {0} ==='.format(trading_row) )
+  print( '!===================================================================')
   pre_trades = db_access.pre_trade_value(cur_currency)
   for data_row in pre_trades :
     now_quantity   = data_row[2]
@@ -49,11 +50,16 @@ for trading_row in trading_balance :
       trading_merit = 0.0
       diff_val = 0.0
       for_side = ""
+      # 後ろ側にinstrumentが会った場合は価格は変動する方の価格になる
+      if re.match(".*" + cur_currency + "$",now_instrument) :
+          now_quantity = ((res_row[1] + res_row[2]) / 2) * now_quantity
       # symbols,min,max,open,close,volume,timestamp
       # print('instrument: "%s" ' % (res_row[0]))
-      if data_row[3] == "sell" and :
+      if (data_row[3] == "sell" and re.match(".*" + cur_currency + "$",now_instrument)) or (data_row[3] == "buy" and re.match("^" + cur_currency + ".*",now_instrument)):
         for_side = "for buy"
         diff_val =  data_row[1] - (res_row[2] * 1.02)
+        trading_price = (now_quantity ) * (data_row[1] - (res_row[1] * 1.02))
+        trading_merit = (now_quantity ) * (data_row[1] - (res_row[1] * 1.02))
       else :
         for_side = "for sell"
         diff_val = (res_row[1] * 0.98)- data_row[1]
@@ -70,4 +76,3 @@ for trading_row in trading_balance :
         print('!=^= min   : "{0: 4.8f}"  max  : "{1: 4.8f}"  trading merit {2: 4.8f} ==='.format(res_row[1],res_row[2],trading_price))
         print ("!------------> timestamp {0:%Y-%m-%d %H:%M:%S}".format(res_row[6]))
         print( '!=^=^=^=^===========================================================')
-
