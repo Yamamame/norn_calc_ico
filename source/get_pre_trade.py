@@ -39,10 +39,11 @@ for trading_row in trading_balance :
   print( '!===================================================================')
   pre_trades = db_access.pre_trade_value(cur_currency)
   for data_row in pre_trades :
-    now_quantity   = data_row[2]
+    now_quantity   = 0
+    trade_price    = data_row[2]
     now_instrument = str(data_row[0])
     if debug == 1 :
-        print( 'instrument: "{0}" side : "{3:5}" price : "{1: 4.8f}"  quantity : "{2: 4.8f}" '.format(now_instrument,data_row[1],now_quantity,data_row[3]))
+        print( 'instrument: "{0}" side : "{3:5}" price : "{1: 4.8f}"  quantity : "{2: 4.8f}" '.format(now_instrument,data_row[1],trade_price,data_row[3]))
     res = db_access.get_recently_price(str(data_row[0]))
     for res_row in res :
         trading_price = 0.0
@@ -54,25 +55,25 @@ for trading_row in trading_balance :
         if (data_row[3] == "sell" and re.match(".*" + cur_currency + "$",now_instrument)):
             for_side = "for buy"
             diff_val =  data_row[1] - (res_row[2] * 1.02)
-            trading_price = (now_quantity ) * (data_row[1] - (res_row[1] * 1.02))
-            trading_merit = (now_quantity ) * (data_row[1] - (res_row[1] * 1.02))
+            trading_price = (trade_price ) * (data_row[1] - (res_row[1] * 1.02))
+            trading_merit = (trade_price ) * (data_row[1] - (res_row[1] * 1.02))
             # 後ろ側にinstrumentがあった場合は価格は変動する方の価格になる
-            now_quantity = ((res_row[1] + res_row[2]) / 2) * now_quantity
+            now_quantity = ((res_row[1] + res_row[2]) / 2) * trade_price
         elif (data_row[3] == "buy" and re.match("^" + cur_currency + ".*",now_instrument)):
             trading_merit = 0
             trading_price = 0
         else :
             for_side = "for sell"
             diff_val = (res_row[1] * 0.98)- data_row[1]
-            trading_price = (now_quantity ) * ((res_row[1] * 1.02)- data_row[1])
-            trading_merit = (now_quantity ) * ((res_row[1] * 1.02)- data_row[1])
+            trading_price = (trade_price ) * ((res_row[1] * 1.02)- data_row[1])
+            trading_merit = (trade_price ) * ((res_row[1] * 1.02)- data_row[1])
         if debug == 1 :
             print('instrument: "{0}" min   : "{1: 4.8f}"  max  : "{2: 4.8f}"'.format(res_row[0],res_row[1],res_row[2],))
             print(' ------------> {0:8} diff : {1: 4.8f} merit {2: 4.8f}"'.format(for_side,diff_val,trading_merit))
         if trading_merit > 0.0 and float(trading_row['available']) > now_quantity:
             print( '!=^=^=^=^==============trading==={0}={1}================================='.format(for_side,cur_currency))
             print( '!=^= instrument: {0} quantity : {1: 4.8f} aveilable : {2} recently trade : {3: 4.8f} ==='.format(
-                now_instrument,now_quantity,trading_row['available'],data_row[1]
+                now_instrument,trade_price,trading_row['available'],data_row[1]
             ))
             print('!=^= min   : "{0: 4.8f}"  max  : "{1: 4.8f}"  trading merit {2: 4.8f} ==='.format(res_row[1],res_row[2],trading_price))
             print ("!------------> timestamp {0:%Y-%m-%d %H:%M:%S}".format(res_row[6]))
