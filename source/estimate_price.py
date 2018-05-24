@@ -19,7 +19,9 @@ debug = 1
 
 # データの読み込みのためライブラリオープン
 db_access = hitbtc_db.HITBTCDB()
-targ_data = db_access.get_recent_period()
+# symbols,timestamp ,min,max,open,close,volume
+candle_data = db_access.get_recent_period()
 
 plt.style.use('seaborn-darkgrid')
-print('{}'.format(targ_data))
+for chandle in candle_data :
+    print(chandle)
