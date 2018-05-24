@@ -39,8 +39,8 @@ for trading_row in trading_balance :
   print( '!===================================================================')
   pre_trades = db_access.pre_trade_value(cur_currency)
   for data_row in pre_trades :
-    now_quantity   = 0
     trade_price    = data_row[2]
+    now_quantity   = trade_price
     now_instrument = str(data_row[0])
     if debug == 1 :
         print( 'instrument: "{0}" side : "{3:5}" price : "{1: 4.8f}"  quantity : "{2: 4.8f}" '.format(now_instrument,data_row[1],trade_price,data_row[3]))
