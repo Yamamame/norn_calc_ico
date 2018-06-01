@@ -17,6 +17,7 @@ import hitbtc_db
 
 debug = 1
 merit_threshold = 0.05
+aveilable_reserve = 0.75
 data_dir = "/home/yama/hitbtc/"
 f = open(data_dir + 'apikey.txt', 'r')
 for line in f :
@@ -71,7 +72,7 @@ for trading_row in trading_balance :
         if debug == 1 :
             print('instrument: "{0}" min   : "{1: 4.8f}"  max  : "{2: 4.8f}"'.format(res_row[0],res_row[1],res_row[2],))
             print(' ------------> {0:8} diff : {1: 4.8f} merit {2: 4.8f}"'.format(for_side,diff_val,trading_merit))
-        if trading_merit > 0.0 and float(trading_row['available']) > now_quantity:
+        if trading_merit > 0.0 and (float(trading_row['available']) * aveilable_reserve) > now_quantity:
             print( '!=^=^=^=^==============trading==={0}={1}================================='.format(for_side,cur_currency))
             print( '!=^= instrument: {0} quantity : {1: 4.8f} aveilable : {2} recently trade : {3: 4.8f} ==='.format(
                 now_instrument,trade_price,trading_row['available'],data_row[1]
