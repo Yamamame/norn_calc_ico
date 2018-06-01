@@ -16,6 +16,7 @@ import hitbtc
 import hitbtc_db
 
 debug = 1
+merit_threshold = 0.05
 data_dir = "/home/yama/hitbtc/"
 f = open(data_dir + 'apikey.txt', 'r')
 for line in f :
@@ -54,9 +55,9 @@ for trading_row in trading_balance :
         # print('instrument: "%s" ' % (res_row[0]))
         if (data_row[3] == "sell" and re.match(".*" + cur_currency + "$",now_instrument)):
             for_side = "for buy"
-            diff_val =  data_row[1] - (res_row[2] * 1.02)
-            trading_price = (trade_price ) * (data_row[1] - (res_row[1] * 1.02))
-            trading_merit = (trade_price ) * (data_row[1] - (res_row[1] * 1.02))
+            diff_val =  data_row[1] - (res_row[2] * (1 + merit_threshold))
+            trading_price = (trade_price ) * (data_row[1] - (res_row[1] * (1 + merit_threshold)))
+            trading_merit = (trade_price ) * (data_row[1] - (res_row[1] * (1 + merit_threshold)))
             # 後ろ側にinstrumentがあった場合は価格は変動する方の価格になる
             now_quantity = ((res_row[1] + res_row[2]) / 2) * trade_price
         elif (data_row[3] == "buy" and re.match("^" + cur_currency + ".*",now_instrument)):
@@ -64,9 +65,9 @@ for trading_row in trading_balance :
             trading_price = 0
         else :
             for_side = "for sell"
-            diff_val = (res_row[1] * 0.98)- data_row[1]
-            trading_price = (trade_price ) * ((res_row[1] * 1.02)- data_row[1])
-            trading_merit = (trade_price ) * ((res_row[1] * 1.02)- data_row[1])
+            diff_val = (res_row[1] * (1 - merit_threshold))- data_row[1]
+            trading_price = (trade_price ) * ((res_row[1] * (1 - merit_threshold))- data_row[1])
+            trading_merit = (trade_price ) * ((res_row[1] * (1 - merit_threshold))- data_row[1])
         if debug == 1 :
             print('instrument: "{0}" min   : "{1: 4.8f}"  max  : "{2: 4.8f}"'.format(res_row[0],res_row[1],res_row[2],))
             print(' ------------> {0:8} diff : {1: 4.8f} merit {2: 4.8f}"'.format(for_side,diff_val,trading_merit))
