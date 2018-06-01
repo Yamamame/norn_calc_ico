@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head><title>pict</title></head>
+<link rel="stylesheet" type="text/css" media="screen" href="./css/opencv_test.css" />
+<body>
+  <div class="main">
+    {% if message == '' %}
+    <p>{{ message }}</p>
+    {% for val in all_balance %}
+    <li>左上{{ val.lt }} ■ {{ val.cube }} </li>
+    {% endfor %}
+    <img src="detected.jpg"  alt="変換後" title="変換後" />
+    {% else %}
+    <p>{{ message }}</p>
+    <img src="detected.jpg"  alt="変換後" title="変換後" />
+    {% endif %}
+  </div>
+</body>
+</html>
