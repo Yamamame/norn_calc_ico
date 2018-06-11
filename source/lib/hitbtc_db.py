@@ -5,12 +5,12 @@ import MySQLdb
 import datetime
 
 class HITBTCDB(object):
-    def __init__(self):
-        self.db_host     = 'localhost'
-        self.db_port     = 3306
-        self.db_user     = 'yama'
-        self.db_pass     = 'sYr6nukU'
-        self.db_name     = 'altcoins'
+    def __init__(self,host='localhost',port=3306,user='yama',password='sYr6nukU',db_name='altcoins'):
+        self.db_host     = host
+        self.db_port     = port
+        self.db_user     = user
+        self.db_pass     = password
+        self.db_name     = db_name
         self.open_conn()
 
     def open_conn(self):
