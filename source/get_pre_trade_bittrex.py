@@ -53,7 +53,8 @@ for curr_summary in marksum['result']:
     for currency in target_currency :
         if currency in curr_summary['MarketName'] :
             print("aaa {} ".format(curr_summary))
-db_access = hitbtc_db.HITBTCDB(db_host, db_port, db_user, db_pass, db_name)
+db_access = hitbtc_db.HITBTCDB(host=db_host, port=db_port, user=db_user, password=db_pass, db_name=db_name,mode='bittrex')
+db_access.regist_candles_bittrex()
 # for trading_row in trading_balance :
 #   if float(trading_row['available']) == 0.0 :
 #       continue

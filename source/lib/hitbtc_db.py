@@ -5,7 +5,8 @@ import MySQLdb
 import datetime
 
 class HITBTCDB(object):
-    def __init__(self,host='localhost',port=3306,user='yama',password='sYr6nukU',db_name='altcoins'):
+    def __init__(self,host='localhost',port=3306,user='yama',password='sYr6nukU',db_name='altcoins',mode='hitbtc'):
+        self.mode        = mode
         self.db_host     = host
         self.db_port     = port
         self.db_user     = user
@@ -23,7 +24,26 @@ class HITBTCDB(object):
           db     = self.db_name,
         )
         self.cursor = self.conn.cursor()
+    """
+    wrapperとなる関数 名前がずれているがデフォルトはhitbtcとする
+    """
+    def regist_candles(self, set_symbols, data_dict, debug=0):
+        if self.mode == 'bittrex':
+            self.regist_candles_bittrex()
+        else:
+            self.regist_candles_hitbtc(set_symbols, data_dict, debug)
 
+    """
+    bittrex用に作成した関数 共通化できるものは共通化したい
+    """
+    def regist_candles_bittrex(self):
+        print("{0}".format(self.mode))
+
+
+
+    """
+    hitbtc用に作成した関数 共通化できるものは共通化したい
+    """
     def get_used_symbols(self,debug=0):
         # 現在までに売買履歴のあるsymbolを取得
         #select instrument,side,sum(total) from t_trades GROUP BY instrument,side;
@@ -101,7 +121,7 @@ class HITBTCDB(object):
             if float(data_row['available']) > 0 :
                 print('trading balance: "%s"' % data_row)
 
-    def regist_candles(self,set_symbols,data_dict,debug=0):
+    def regist_candles_hitbtc(self,set_symbols,data_dict,debug=0):
         for data_row in data_dict :
             # 現在存在するかどうかチェック
             current_sql  = ' SELECT symbols FROM trade_candles'
