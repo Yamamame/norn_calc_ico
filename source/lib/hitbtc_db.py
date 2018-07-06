@@ -29,16 +29,47 @@ class HITBTCDB(object):
     """
     def regist_candles(self, set_symbols, data_dict, debug=0):
         if self.mode == 'bittrex':
-            self.regist_candles_bittrex()
+            self.regist_candles_bittrex(set_symbols, data_dict)
         else:
             self.regist_candles_hitbtc(set_symbols, data_dict, debug)
 
     """
     bittrex用に作成した関数 共通化できるものは共通化したい
     """
-    def regist_candles_bittrex(self):
-        print("{0}".format(self.mode))
 
+    def regist_candles_bittrex(self, set_symbols, data_dict, debug=1):
+        """ bittrexのAPIはwindowを動かしながら24時間の範囲を取得できる """
+        print("--------------------------------------------------- ")
+        if debug != 0 :
+            print("--------------------------------------------------- ")
+            print("symbol      {0} ".format(data_dict['MarketName']))
+            print("min         {0} ".format(data_dict['Low']))
+            print("max         {0} ".format(data_dict['High']))
+            print("open        {0} ".format(data_dict['PrevDay']))
+            print("close       {0} ".format(data_dict['Last']))
+            print("volume      {0} ".format(data_dict['BaseVolume']))
+            print("volumequote {0} ".format(data_dict['Volume']))
+            print("TimeStamp   {0} ".format(data_dict['TimeStamp']))
+        print("--------------------------------------------------- ")
+        placehold = (
+            data_dict['TimeStamp'].translate(
+                {ord(u'T'): u' ', ord(u'Z'): u' ', }
+            ), set_symbols, data_dict['Low'],
+            data_dict['High'], data_dict['PrevDay'], data_dict['Last'],
+            data_dict['BaseVolume'], data_dict['Volume'],
+        )
+        current_sql = ' INSERT INTO trade_candles '
+        current_sql += ' (timestamp,symbols,min'
+        current_sql += ' ,max,open,close'
+        current_sql += ' ,volume,volumequote,uptime)'
+        current_sql += ' VALUES (CONVERT_TZ(%s,"+00:00","+09:00"),%s,%s'
+        current_sql += ',%s,%s,%s,%s,%s,now())'
+        self.cursor.execute(current_sql, placehold)
+        # result = self.cursor.fetchall()
+        if debug != 0:
+            print('this INSERT OK {0} {1}'.format(data_dict['MarketName'], data_dict['TimeStamp']))
+            print('finish and commit ')
+        self.conn.commit()
 
 
     """

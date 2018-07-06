@@ -18,7 +18,8 @@ import hitbtc_db
 debug = 1
 merit_threshold = 0.05
 aveilable_reserve = 0.75
-target_currency = ['ETH', 'XMR', 'XMO']
+# とりあえずhitbtcで取引しているものだけに
+target_currency = ['XDN', 'XMR', 'XMO', 'FCN', 'DSH', 'BTG']
 data_dir = "/home/yama/Documents/bittrex/"
 f = open(data_dir + 'apikey.txt', 'r')
 for line in f :
@@ -45,7 +46,9 @@ for line in f :
 client = bittrex.BITTREXClient(api_pub_keys, api_sec_keys)
 marksum = client.get_getmarketsummaries()
 amark = client.get_ticker()
-print(" {} ".format(amark))
+print(" ^-^{} ".format(amark))
+db_access = hitbtc_db.HITBTCDB(
+    host=db_host, port=db_port, user=db_user, password=db_pass, db_name=db_name, mode='bittrex')
 
 print(" {} ".format(marksum['message']))
 for curr_summary in marksum['result']:
@@ -53,8 +56,8 @@ for curr_summary in marksum['result']:
     for currency in target_currency :
         if currency in curr_summary['MarketName'] :
             print("aaa {} ".format(curr_summary))
-db_access = hitbtc_db.HITBTCDB(host=db_host, port=db_port, user=db_user, password=db_pass, db_name=db_name,mode='bittrex')
-db_access.regist_candles_bittrex()
+            db_access.regist_candles(curr_summary['MarketName'], curr_summary)
+
 # for trading_row in trading_balance :
 #   if float(trading_row['available']) == 0.0 :
 #       continue

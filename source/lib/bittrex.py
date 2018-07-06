@@ -13,24 +13,26 @@ class BITTREXClient(object):
         self.session.auth = (public_key, secret)
         self.now     = datetime.date.today()
 
-    def get_symbol(self, symbol_code):
-        """Get symbol."""
-        return self.session.get("%s/public/symbol/%s" % (self.url, symbol_code)).json()
-
     def get_getmarketsummaries(self):
         """Get getmarketsummaries. Used to get the last 24 hour summary of all active markets."""
         return self.session.get("%s/public/getmarketsummaries" % (self.url,)).json()
 
-    def get_address(self, currency_code):
-        return self.session.get("%s/account/crypto/address/%s" % (self.url, currency_code)).json()
-
     def get_ticker(self, symbols="BTC-ETH"):
+        """ Used to get the current tick values for a market. """
         print(self.session.post("%s/public/getticker" % self.url, data={
             'market': symbols,
         }).json())
         return self.session.post("%s/public/getticker" % self.url, data={
             'market': symbols,
         }).json()
+
+# ここまでは仕様を確認
+    def get_symbol(self, symbol_code):
+        """Get symbol."""
+        return self.session.get("%s/public/symbol/%s" % (self.url, symbol_code)).json()
+
+    def get_address(self, currency_code):
+        return self.session.get("%s/account/crypto/address/%s" % (self.url, currency_code)).json()
 
     def get_history_trades(self):
         return self.session.get("%s/history/trades/" % (self.url)).json()
