@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #coding: utf-8
 #estimate_price.py
 # import関連
@@ -15,7 +15,7 @@ import warnings
 
 debug = 1
 
-#%matplotlib inline
+# %matplotlib inline
 # 30分毎なので48で1日
 time_ago  =48 * 30
 # 評価パラメータをいくつ用いるか？
@@ -27,6 +27,8 @@ pre_time = 1
 db_access = hitbtc_db.HITBTCDB()
 # symbols,timestamp ,min,max,open,close,volume
 candle_data = db_access.get_recent_period()
+value_disp = np.zeros(len(candle_data))
+time_disp = []
 
 plt.style.use('seaborn-darkgrid')
 # for chandle in candle_data :
@@ -39,7 +41,13 @@ X = np.zeros((len(targ_data), time_ago * num_param))
 # closeの値で計算する
 for i in range(0, time_ago):
     X[i:len(targ_data),i] = targ_data[0:len(targ_data)-i,5]
+    print("%s" % targ_data[i, 1])
 print("%s" % X)
+
+for i in range(0, time_ago):
+    time_disp[i] = targ_data[i, 1].timestamp()
+    value_disp[i] = (targ_data[i, 2] + targ_data[i, 3]) /2
+print("%s" % time_disp)
 
 # 被説明変数となる Y = pre_time後の終値-当日終値 を作成します
 Y = np.zeros(len(targ_data))
@@ -55,6 +63,7 @@ for i in range(time_ago,len(X)):
         X[i,j] = (X[i,j] - tmp_mean[i]) # Xを正規化
     Y[i] =  Y[i]  # X同士の引き算しているので、Yはそのまま
 
-# sns.set_style('darkgrid')
-# pg = sns.pairplot(df)
-# pg.savefig('./seaborn_pairplot_default.png')
+# 出力画像の作成
+fig = plt.figure()
+ax = fig.add_subplot(1, 1, 1)
+ax.plot(time_disp, value_disp, linestyle='--', color='b', label='y = sin(x)')
