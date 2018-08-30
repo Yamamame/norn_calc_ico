@@ -10,26 +10,25 @@ import cgi
 import os
 import sys
 
-template_filename = './template/opencv_test.tpl.html'
 cnt = 0
 msg = ''
 status = []
 
 filename_list=list()
 filename_list.append('5ac8989e-8710-214d-1c2a-008476953a94.jpeg')
-filename_list.append('2013-05-18_18-35-27_785.jpg')
 filename_list.append('../../Desktop/yoroshikune/FB_IMG_1471088127162.jpg')
+filename_list.append('2013-05-18_18-35-27_785.jpg')
 filename_list.append('../../Desktop/yoroshikune/1404138199814.jpg')
 filename = filename_list[0]
-
 #HAAR分類器の顔検出用の特徴量
+git_opencv_path="/home/yama/git/this_work/opencv/"
 cascade_list=list()
-cascade_list.append("/usr/share/OpenCV/haarcascades/haarcascade_frontalface_alt_tree.xml")
-cascade_list.append("/usr/share/OpenCV/haarcascades/haarcascade_frontalface_alt2.xml")
-cascade_list.append("/usr/share/OpenCV/haarcascades/haarcascade_frontalface_alt.xml")
-cascade_list.append("/usr/share/OpenCV/haarcascades/haarcascade_frontalface_default.xml")
-cascade_path = cascade_list[0]
+cascade_list.append(git_opencv_path + "data/haarcascades/haarcascade_frontalface_alt_tree.xml")
+cascade_list.append(git_opencv_path + "data/haarcascades/haarcascade_frontalface_alt2.xml")
+cascade_list.append(git_opencv_path + "data/haarcascades/haarcascade_frontalface_alt.xml")
+cascade_list.append(git_opencv_path + "data/haarcascades/haarcascade_frontalface_default.xml")
 
+cascade_path = cascade_list[0]
 
 faceCascade = cv2.CascadeClassifier(cascade_path)
 
@@ -49,8 +48,8 @@ else:
 cv2.imwrite('detected.jpg', img)
 cgitb.enable()
 env = Environment(loader=FileSystemLoader('./',encoding='utf8'))
-tpl = env.get_template(template_filename)
+tpl = env.get_template('./template/opencv_test.tpl.html')
 html = tpl.render({'filename':filename,'message':msg,'count':cnt,'rect':status})
-print "Content-Type: text/html;charset=utf-8"
-print ""
-print html.encode('utf8')
+print ("Content-Type: text/html;charset=utf-8")
+print ("")
+print (html.encode('utf8'))
