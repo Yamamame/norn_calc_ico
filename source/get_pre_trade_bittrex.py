@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #coding: utf-8
 #get_pre_trade.py
 #hitbtc    : hitbtcからデータを取得するライブラリ
@@ -15,9 +15,11 @@ import re
 import bittrex
 import hitbtc_db
 
-debug = 1
+debug = 0
 merit_threshold = 0.05
 aveilable_reserve = 0.75
+api_pub_keys=""
+api_sec_keys=""
 # とりあえずhitbtcで取引しているものだけに
 target_currency = ['XDN', 'XMR', 'XMO', 'FCN', 'DSH', 'BTG']
 data_dir = "/home/yama/Documents/bittrex/"
@@ -56,7 +58,7 @@ for curr_summary in marksum['result']:
     for currency in target_currency :
         if currency in curr_summary['MarketName'] :
             print("aaa {} ".format(curr_summary))
-            db_access.regist_candles(curr_summary['MarketName'], curr_summary)
+            db_access.regist_candles(curr_summary['MarketName'], curr_summary,debug=1)
 
 # for trading_row in trading_balance :
 #   if float(trading_row['available']) == 0.0 :

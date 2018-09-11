@@ -29,7 +29,7 @@ class HITBTCDB(object):
     """
     def regist_candles(self, set_symbols, data_dict, debug=0):
         if self.mode == 'bittrex':
-            self.regist_candles_bittrex(set_symbols, data_dict)
+            self.regist_candles_bittrex(set_symbols, data_dict, debug)
         else:
             self.regist_candles_hitbtc(set_symbols, data_dict, debug)
 
@@ -37,7 +37,7 @@ class HITBTCDB(object):
     bittrex用に作成した関数 共通化できるものは共通化したい
     """
 
-    def regist_candles_bittrex(self, set_symbols, data_dict, debug=1):
+    def regist_candles_bittrex(self, set_symbols, data_dict, debug=0):
         """ bittrexのAPIはwindowを動かしながら24時間の範囲を取得できる """
         print("--------------------------------------------------- ")
         if debug != 0 :
