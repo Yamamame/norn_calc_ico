@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #coding: utf-8
 #opencv_testcmd.py
 from jinja2 import Environment,FileSystemLoader
@@ -49,7 +49,7 @@ tpl = env.get_template(template_filename)
 html = tpl.render(
     {'message':msg,'changetxt':changetxt,'rect':status,'dictkeys':vd,'dictval':v}
     )
-print "Content-Type: text/html;charset=utf-8"
-print ""
-print html.encode('utf8')
+print ("Content-Type: text/html;charset=utf-8")
+print ("")
+print (html.encode('utf8'))
 # pprint(formitem, depth=1)
