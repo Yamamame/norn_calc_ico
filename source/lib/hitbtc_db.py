@@ -251,8 +251,8 @@ class HITBTCDB(object):
         # self.cursor.execute(current_sql)
         data_dict = self.cursor.fetchall()
         for data_row in data_dict :
-            print('calc instrument: "{0:10s}" '.format(data_row[0]))
-            print('calc      price: "{0:10s}" '.format(data_row[1]))
+            print('calc instrument: "{0:<10}" '.format(data_row[0]))
+            print('calc      price: "{0:<10}" '.format(data_row[1]))
             print('calc   quantity: "{0: 4.10f}" '.format(data_row[2]))
         return average_value
 
@@ -260,13 +260,13 @@ class HITBTCDB(object):
     def pre_trade_value(self,instrument='ETH',debug = 0):
         instrument = '%' + instrument + '%'
         current_sql  = ' SELECT t_a.instrument,t_a.price,t_a.quantity,t_a.side FROM t_trades as t_a '
-        current_sql += ' INNER JOIN ('
-        current_sql += '     SELECT instrument,side,max(exec_date) as exec_date FROM t_trades '
-        current_sql += '     WHERE instrument like %s GROUP BY instrument,side '
-        current_sql += ' ) as t_b '
-        current_sql += ' ON  t_a.instrument = t_b.instrument '
-        current_sql += ' AND t_a.side  = t_b.side  '
-        current_sql += ' AND t_a.exec_date  = t_b.exec_date ; '
+        current_sql += ' WHERE id IN '
+        current_sql += '     (SELECT id FROM t_trades '
+        current_sql += '      WHERE (instrument,side,exec_date) IN '
+        current_sql += '          ( SELECT instrument,side,max(exec_date) FROM t_trades GROUP BY instrument,side ) '
+        current_sql += '      GROUP BY instrument,side'
+        current_sql += '     ) '
+        current_sql += ' AND instrument like %s; '
         placehold = (
             instrument,
         )
