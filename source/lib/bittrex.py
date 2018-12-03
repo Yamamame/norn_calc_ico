@@ -7,7 +7,7 @@ import datetime
 import time
 
 class BITTREXClient(object):
-    def __init__(self, public_key, secret, url="https://bittrex.com/"):
+    def __init__(self, public_key, secret, url="https://bittrex.com"):
         self.url = url + "/api/v1.1"
         self.session = requests.session()
         self.session.auth = (public_key, secret)
@@ -15,16 +15,25 @@ class BITTREXClient(object):
 
     def get_getmarketsummaries(self):
         """Get getmarketsummaries. Used to get the last 24 hour summary of all active markets."""
-        return self.session.get("%s/public/getmarketsummaries" % (self.url,)).json()
+        try :
+            retVal = self.session.get("%s/public/getmarketsummaries" % (self.url,)).json()
+        except ValueError :
+            retVal = self.session.get("%s/public/getmarketsummaries" % (self.url,))
+        # print('get_getmarketsummaries : {0}'.format(retVal))
+        return retVal
 
     def get_ticker(self, symbols="BTC-ETH"):
         """ Used to get the current tick values for a market. """
-        print(self.session.post("%s/public/getticker" % self.url, data={
-            'market': symbols,
-        }).json())
-        return self.session.post("%s/public/getticker" % self.url, data={
-            'market': symbols,
-        }).json()
+        try :
+            retVal = self.session.post("%s/public/getticker" % self.url, data={
+                'market': symbols,
+            }).json()
+        except ValueError :
+            retVal = self.session.post("%s/public/getticker" % self.url, data={
+                'market': symbols,
+            })
+        # print('get_ticker : {0}'.format(retVal))
+        return retVal
 
 # ここまでは仕様を確認
     def get_symbol(self, symbol_code):
