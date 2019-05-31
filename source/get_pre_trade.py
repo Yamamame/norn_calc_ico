@@ -20,6 +20,7 @@ import hitbtc_db
 debug = 1
 merit_threshold = 0.05
 aveilable_reserve = 0.75
+hundredth_percent_symbols = ['XDNBTC', ]
 data_dir = "/home/yama/hitbtc/"
 f = open(data_dir + 'apikey.txt', 'r')
 for line in f :
@@ -43,11 +44,14 @@ for trading_row in trading_balance :
     print( '!===================================================================')
     pre_trades = db_access.pre_trade_value(cur_currency)
     for data_row in pre_trades :
-        trade_price    = data_row[2]
-        now_quantity   = trade_price
         now_instrument = str(data_row[0])
+        if now_instrument in hundredth_percent_symbols :
+            trade_price = (data_row[2] * 0.01)
+        else :
+            trade_price = (data_row[2] * 1)
+        now_quantity   = trade_price
         if debug == 1 :
-            print( 'instrument: "{0}" side : "{3:5}" price : "{1: 4.8f}"  quantity : "{2: 4.8f}" '.format(now_instrument,data_row[1],trade_price,data_row[3]))
+            print( 'instrument: "{0}" side : "{3:5}" price : "{1: 4.10f}"  quantity : "{2: 4.10f}" '.format(now_instrument,data_row[1],trade_price,data_row[3]))
         res = db_access.get_recently_price(str(data_row[0]))
         for res_row in res :
             trading_price = 0.0
@@ -76,15 +80,15 @@ for trading_row in trading_balance :
                 trading_merit = (trade_price ) * ((res_row[1] * (1 - merit_threshold))- data_row[1])
                 expected_value = (res_row[1] * (1 - merit_threshold))
             if debug == 1 :
-                print('instrument: "{0}" min   : "{1: 4.8f}"  max  : "{2: 4.8f}"'.format(res_row[0],res_row[1],res_row[2],))
-                print(' ------------> {0:8} diff : {1: 4.8f} merit {2: 4.8f}  expected{3: 4.8f} availale{4: 4.8f}"'.format(
+                print('instrument: "{0}" min   : "{1: 4.10f}"  max  : "{2: 4.10f}"'.format(res_row[0],res_row[1],res_row[2],))
+                print(' ------------> {0:8} diff : {1: 4.10f} merit {2: 4.10f}  expected{3: 4.10f} availale{4: 4.10f}"'.format(
                     for_side, diff_val, trading_merit, expected_value, float(trading_row['available'])))
             if trading_merit > 0.0 and (float(trading_row['available']) * aveilable_reserve) > now_quantity:
                 print( '!=^=^=^=^==============trading==={0}={1}================================='.format(for_side,cur_currency))
-                print( '!=^= instrument: {0} quantity : {1: 4.8f} aveilable : {2} recently trade : {3: 4.8f} ==='.format(
+                print( '!=^= instrument: {0} quantity : {1: 4.10f} aveilable : {2} recently trade : {3: 4.10f} ==='.format(
                     now_instrument,trade_price,trading_row['available'],data_row[1]
                 ))
-                print('!=^= min   : "{0: 4.8f}"  max  : "{1: 4.8f}"  trading merit {2: 4.8f} expected{3: 4.8f} ==='.format(
+                print('!=^= min   : "{0: 4.10f}"  max  : "{1: 4.10f}"  trading merit {2: 4.10f} expected{3: 4.10f} ==='.format(
                     res_row[1], res_row[2], trading_price, expected_value))
                 print ("!------------> timestamp {0:%Y-%m-%d %H:%M:%S}".format(res_row[6]))
                 print( '!=^=^=^=^===========================================================')
