@@ -25,3 +25,29 @@ class payment_history(models.Model):
     currency = models.CharField(max_length=8)
     # udate_at
     update_at =  models.DateTimeField()
+
+class t_trades(models.Model) :
+    # Date
+    exec_date = models.DateTimeField()
+    # Instrument
+    instrument = models.CharField(max_length=15)
+    # Trade_ID
+    id = models.CharField(max_length=15)
+    # Order_ID
+    order_id = models.CharField(max_length=15)
+    # Side
+    side = models.CharField(max_length=6)
+    # Quantity
+    quantity = models.FloatField()
+    # Price
+    price = models.FloatField()
+    # Volume
+    volume = models.FloatField()
+    # Fee
+    fee = models.FloatField()
+    # Rebate
+    rebate = models.FloatField()
+    # Total
+    total = models.FloatField()
+    # update at
+    uptime =  models.DateTimeField()
