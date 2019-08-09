@@ -199,8 +199,8 @@ class HITBTCDB(object):
         instrument = '%' + instrument + '%'
         # 今日の分を含めるため予め+1しておく
         nowdate   = datetime.date.today() + datetime.timedelta(days=1)
-        startdate = nowdate - datetime.timedelta(days=30 * span_start)
-        enddate   = nowdate - datetime.timedelta(days=30 * span_end)
+        startdate = nowdate - datetime.timedelta(days= int(30 * span_start))
+        enddate   = nowdate - datetime.timedelta(days= int(30 * span_end))
         current_sql  = ' select symbols,timestamp ,min,max,open,close,volume from trade_candles tca '
         current_sql += ' WHERE symbols like %s AND timestamp BETWEEN %s AND %s '
         current_sql += ' ORDER BY symbols,timestamp '
