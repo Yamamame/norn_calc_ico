@@ -17,7 +17,7 @@ import warnings
 import hitbtc
 import hitbtc_db
 
-not_service_symbols = ['DSHBTC',]
+not_service_symbols = ['DSHBTC','FCNBTC','XMOBTC']
 
 data_dir = "/home/yama/hitbtc/"
 f = open(data_dir + 'apikey.txt', 'r')

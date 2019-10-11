@@ -155,6 +155,9 @@ class HITBTCDB(object):
     def regist_candles_hitbtc(self,set_symbols,data_dict,debug=0):
         for data_row in data_dict :
             # 現在存在するかどうかチェック
+            if not isinstance(data_row, dict) and data_row in 'error':
+                print("symbols:{0} error : {1}".format(set_symbols, data_dict))
+                continue
             current_sql  = ' SELECT symbols FROM trade_candles'
             current_sql += ' WHERE symbols=%s AND timestamp=CONVERT_TZ(%s,"+00:00","+09:00") ;'
             placehold = (
