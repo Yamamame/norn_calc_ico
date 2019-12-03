@@ -198,7 +198,7 @@ class HITBTCDB(object):
                 print('        average: "%s"' % average_value)
                 print(' ')
 
-    def get_recent_period(self,instrument='ETH',span_end=0,span_start=3):
+    def get_recent_period(self, instrument='ETHBTC', span_end=0, span_start=3):
         instrument = '%' + instrument + '%'
         # 今日の分を含めるため予め+1しておく
         nowdate   = datetime.date.today() + datetime.timedelta(days=1)
