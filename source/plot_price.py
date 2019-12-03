@@ -17,7 +17,7 @@ import warnings
 
 debug = 1
 
-span_start = 0.125
+span_start = 1
 span_end = 0
 
 table_get_col = {"label":0,"time":1,"min":2,"close":5}
@@ -50,35 +50,23 @@ print("targ_data.shape:{}".format(targ_data.shape))
 print("targ_data:{}".format(targ_data))
 print("LENGTH {0: 08d}".format(len(targ_data)))
 # Xの初期化
-X = np.zeros((len(targ_data)))
+X = np.zeros((len(targ_data) - 1))
 
 # 開始時間をとっておいてその差分とする
 start_time = 0
-data_label_name = ''
 # 時間データをXに入れる
 for i in range(0, (time_ago - 1)):
-    # print("{}".format(targ_data[i, 1]))
-    if data_label_name == '' :
-        data_label_name = targ_data[i, table_get_col["label"]]
-    elif data_label_name != targ_data[i, table_get_col["label"]] :
-        break
     if i == 0 :
         start_time = targ_data[i, table_get_col["time"]].timestamp()
     X[i] = (targ_data[i, table_get_col["time"]].timestamp() - start_time) / 100
     print("X:{0} label:".format(X[i],))
 
-# print("X:{}".format(X))
 
 # 被説明変数となる Y = pre_time後の終値-当日終値 を作成します
-Y = np.zeros(len(targ_data))
+Y = np.zeros(len(targ_data) - 1)
 data_label_name = ''
 # minデータをYに入れる
 for i in range(0, (time_ago - 1)):
-    # print("{}".format(targ_data[i, 1]))
-    if data_label_name == '':
-        data_label_name = targ_data[i, table_get_col["label"]]
-    elif data_label_name != targ_data[i, table_get_col["label"]]:
-        break
     Y[i] = targ_data[i, data_kind]
     print("Y:{}".format(Y[i]))
 
