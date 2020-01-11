@@ -3,7 +3,8 @@
 #estimate_price.py
 # import関連
 import sys
-sys.path.append('/home/yama/public_html/py_practice/lib/')
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/lib/')
 import numpy as np
 import pandas as pd
 import matplotlib.pylab as plt
@@ -87,6 +88,7 @@ fig = plt.figure()
 ax = fig.add_subplot(1, 1, 1)
 ax.plot(time_disp, value_disp, linestyle='--', color='b', label='y = sin(x)')
 # ax.plot(X[:,1], Y, linestyle='--', color='b', label='y = sin(x)')
+
 # 凡例の表示
 plt.legend()
 

@@ -18,7 +18,7 @@ import hitbtc_db
 
 
 debug = 1
-merit_threshold = 0.05
+merit_threshold = 0.04
 aveilable_reserve = 0.75
 hundredth_percent_symbols = ['XDNBTC', ]
 data_dir = "/home/yama/hitbtc/"
