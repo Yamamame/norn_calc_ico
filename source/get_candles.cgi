@@ -37,9 +37,10 @@ print('ETH deposit address: "%s"' % address)
 current_symbols="ETHBTC"
 used_symbols = db_access.get_used_symbols(1)
 for current_symbols in used_symbols :
-  print ('ETH deposit address: "%s"' % current_symbols)
+  print ('ETH deposit address: "%s"'.format(current_symbols))
   candles = client.get_candles(current_symbols[0])
-  # print('candles: "%s"' % candles)
+  # if candles[0]['status'] != 200 :
+  #   print('candles: "%s"' % candles)
   print ('ETH deposit address: "%s"'.format(current_symbols))
   if current_symbols[0] not in not_service_symbols:
-    db_access.regist_candles(current_symbols,candles)
+    db_access.regist_candles(current_symbols,candles,debug=1)
