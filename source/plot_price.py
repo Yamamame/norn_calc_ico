@@ -1,11 +1,11 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 #coding: utf-8
 #estimate_price.py
 # import関連
+import datetime
 import sys
 import os
 sys.path.append('/home/yama/public_html/py_practice/lib/')
-from datetime import datetime
 import numpy as np
 import pandas as pd
 import matplotlib.pylab as plt
@@ -57,8 +57,12 @@ start_time = 0
 # 時間データをXに入れる
 for i in range(0, (time_ago - 1)):
     if i == 0 :
-        start_time = targ_data[i, table_get_col["time"]].timestamp()
-    X[i] = (targ_data[i, table_get_col["time"]].timestamp() - start_time) / 100
+        # start_time = targ_data[i, table_get_col["time"]].timestamp()
+        start_time = targ_data[i, table_get_col["time"]]
+    # X[i] = (targ_data[i, table_get_col["time"]].timestamp() - start_time) / 100
+    #  X[i] = targ_data[i, table_get_col["time"]].timestamp()
+    X[i] = - (targ_data[i, table_get_col["time"]] -
+              datetime.datetime(1970, 1, 1)).total_seconds()
     print("X:{0} label:".format(X[i],))
 
 
