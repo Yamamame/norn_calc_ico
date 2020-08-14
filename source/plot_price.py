@@ -23,6 +23,8 @@ span_end = 0
 table_get_col = {"label":0,"time":1,"min":2,"close":5}
 # 2はmin,3はmax,4はopen,5はclose
 data_kind = 5
+data_kind_open = 4
+data_kind_close = 5
 # %matplotlib inline
 # 30分毎なので47で1日 0:00と24:00がおなじになるように
 time_ago = 47 * int(30 * (span_start - span_end))
@@ -71,6 +73,7 @@ Y = np.zeros(len(targ_data) - 1)
 data_label_name = ''
 # minデータをYに入れる
 for i in range(0, (time_ago - 1)):
+    # Y[i] = targ_data[i, data_kind_open] - targ_data[i, data_kind_close]
     Y[i] = targ_data[i, data_kind]
     print("Y:{}".format(Y[i]))
 
