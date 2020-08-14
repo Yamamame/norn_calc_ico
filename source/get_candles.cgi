@@ -6,9 +6,9 @@
 #参照: https://github.com/hitbtc-com/hitbtc-api/blob/master/example_rest.py
 import sys
 import os
-current_path = os.getcwd()
+current_path = os.path.dirname(__file__)
 print current_path
-sys.path.append('/home/yama/public_html/py_practice/lib/')
+sys.path.append(current_path + '/lib/')
 import numpy as np
 import pandas as pd
 import matplotlib.pylab as plt
@@ -39,7 +39,7 @@ used_symbols = db_access.get_used_symbols(1)
 for current_symbols in used_symbols :
   print ('ETH deposit address: "%s"' % current_symbols)
   candles = client.get_candles(current_symbols[0])
-  # print('candles: "%s"' % candles)
+  print('candles: "%s"' % candles)
   print ('ETH deposit address: "%s"'.format(current_symbols))
   if current_symbols[0] not in not_service_symbols:
     db_access.regist_candles(current_symbols,candles)
