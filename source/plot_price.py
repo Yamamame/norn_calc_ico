@@ -68,22 +68,26 @@ for i in range(0, (time_ago - 1)):
     print("X:{0} label:".format(X[i],))
 
 
+# 出力画像の作成
+fig = plt.figure()
+
 # 被説明変数となる Y = pre_time後の終値-当日終値 を作成します
 Y = np.zeros(len(targ_data) - 1)
+D = np.zeros(len(targ_data) - 1)
 data_label_name = ''
 # minデータをYに入れる
 for i in range(0, (time_ago - 1)):
-    # Y[i] = targ_data[i, data_kind_open] - targ_data[i, data_kind_close]
+    D[i] = abs(targ_data[i, data_kind_open] - targ_data[i, data_kind_close]) * 50
     Y[i] = targ_data[i, data_kind]
-    print("Y:{}".format(Y[i]))
 
-# print("Y:{}".format(Y))
 
-# 出力画像の作成
-fig = plt.figure()
+# 上で作った画像にplot
 # ax = fig.add_subplot(1, 1, 1)
 # ax.plot(X, Y, linestyle='--', color='b', label='y = min')
-plt.plot(X, Y, linestyle='solid', color='b', marker='.', label='y = min')
+plt.plot(X, Y, linestyle='solid', color='b', marker='.', label='y = close')
+plt.plot(X, D, linestyle='solid', color='r', marker='.', label='d = (|open - close|)*50')
+
+
 # 凡例の表示
 plt.legend()
 
