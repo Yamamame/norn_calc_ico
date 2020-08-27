@@ -15,9 +15,14 @@ import hitbtc_db
 import warnings
 #warnings.filterwarnings('ignore') # 実行上問題ない注意は非表示にします
 
+args = sys.argv
+
+instrument_str = 'ETHBTC'
+if  len(args) > 1 :
+    instrument_str = args[1]
 debug = 1
 
-span_start = 1
+span_start = 0.1
 span_end = 0
 
 table_get_col = {"label":0,"time":1,"min":2,"close":5}
@@ -36,7 +41,8 @@ pre_time = 1
 # データの読み込みのためライブラリオープン
 db_access = hitbtc_db.HITBTCDB()
 # symbols,timestamp ,min,max,open,close,volume
-candle_data = db_access.get_recent_period(instrument='ETHBTC',span_end=span_end, span_start=span_start)
+candle_data = db_access.get_recent_period(
+    instrument=instrument_str, span_end=span_end, span_start=span_start)
 value_disp = np.zeros(len(candle_data))
 
 plt.style.use('seaborn-darkgrid')
@@ -84,7 +90,10 @@ for i in range(0, (time_ago - 1)):
 # 上で作った画像にplot
 # ax = fig.add_subplot(1, 1, 1)
 # ax.plot(X, Y, linestyle='--', color='b', label='y = min')
+# subplot(行の数, 列の数, 何番目に配置しているか)
+plt.subplot(2,1,1)
 plt.plot(X, Y, linestyle='solid', color='b', marker='.', label='y = close')
+plt.subplot(2,1,2)
 plt.plot(X, D, linestyle='solid', color='r', marker='.', label='d = (|open - close|)*50')
 
 
