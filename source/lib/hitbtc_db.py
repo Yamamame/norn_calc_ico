@@ -292,7 +292,7 @@ class HITBTCDB(object):
     ###前回のトレードを取得
     def pre_trade_value(self,instrument='ETH',debug = 0):
         instrument = '%' + instrument + '%'
-        current_sql = ' SELECT t_a.instrument,t_a.price,t_a.quantity,t_a.side,,t_a.exec_date FROM t_trades as t_a '
+        current_sql = ' SELECT t_a.instrument,t_a.price,t_a.quantity,t_a.side,t_a.exec_date FROM t_trades as t_a '
         current_sql += ' WHERE id IN '
         current_sql += '     (SELECT id FROM t_trades '
         current_sql += '      WHERE (instrument,side,exec_date) IN '
