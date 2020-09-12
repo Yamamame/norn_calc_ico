@@ -273,7 +273,7 @@ class HITBTCDB(object):
 
         ###これで平均値になるか? -> sellとbuyが区別できていない
         current_sql  = ' SELECT instrument,avg(price),avg(quantity) FROM t_trades '
-        current_sql += ' WHERE uptime > (now() - INTERVAL 1 month) AND  instrument like %s GROUP BY instrument;'
+        current_sql += ' WHERE exec_date > (now() - INTERVAL 1 month) AND  instrument like %s GROUP BY instrument;'
         # current_sql += ' WHERE uptime > (now() - INTERVAL 12 month)  '
         placehold = (
             instrument,
@@ -292,7 +292,7 @@ class HITBTCDB(object):
     ###前回のトレードを取得
     def pre_trade_value(self,instrument='ETH',debug = 0):
         instrument = '%' + instrument + '%'
-        current_sql  = ' SELECT t_a.instrument,t_a.price,t_a.quantity,t_a.side FROM t_trades as t_a '
+        current_sql = ' SELECT t_a.instrument,t_a.price,t_a.quantity,t_a.side,,t_a.exec_date FROM t_trades as t_a '
         current_sql += ' WHERE id IN '
         current_sql += '     (SELECT id FROM t_trades '
         current_sql += '      WHERE (instrument,side,exec_date) IN '
