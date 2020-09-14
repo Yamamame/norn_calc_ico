@@ -198,7 +198,10 @@ class HITBTCDB(object):
                 average_value = self.calculate_current_price(data_row['currency'])
                 print('        average: "%s"' % average_value)
                 print(' ')
-
+    """
+    入力された範囲で月をずらしてnヶ月分を取得する
+    (デフォルトは3ヶ月前から今日まで)
+    """
     def get_recent_period(self, instrument='ETHBTC', span_end=0, span_start=3):
         instrument = '%' + instrument + '%'
         # 今日の分を含めるため予め+1しておく
@@ -218,7 +221,34 @@ class HITBTCDB(object):
         self.cursor.execute(current_sql,placehold)
         data_dict = self.cursor.fetchall()
         return data_dict
+    """
+    入力された範囲で月をずらしてnヶ月分を取得する
+    (デフォルトは3ヶ月前から今日まで)
+    """
 
+    def get_recent_period_tith_datetime(self, instrument='ETHBTC', span_end=None, span_start=None):
+        instrument = '%' + instrument + '%'
+        # 今日の分を含めるため予め+1しておく
+        nowdate = datetime.date.today() + datetime.timedelta(days=1)
+        if span_end is None :
+            span_end = nowdate - datetime.timedelta(days=int(30 * 0))
+        if span_start is None :
+            span_start = nowdate - datetime.timedelta(days=int(30 * 3))
+            
+        current_sql = ' select symbols,timestamp ,min,max,open,close,volume from trade_candles tca '
+        current_sql += ' WHERE symbols like %s AND timestamp BETWEEN %s AND %s '
+        current_sql += ' ORDER BY symbols,timestamp '
+        placehold = (
+            instrument,
+            "{0:%Y-%m-%d}".format(span_start),
+            "{0:%Y-%m-%d}".format(span_end),
+        )
+        # print (current_sql)
+        # print (placehold)
+        self.cursor.execute(current_sql, placehold)
+        data_dict = self.cursor.fetchall()
+        return data_dict
+        
     def get_recently_price(self,instrument):
         instrument = '%' + instrument + '%'
         current_sql  = ' select tca.symbols,min,max,open,close,volume,tca.timestamp from trade_candles tca '

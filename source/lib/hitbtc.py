@@ -25,9 +25,13 @@ class HITBTClient(object):
         return self.session.get("%s/account/crypto/address/%s" % (self.url, currency_code)).json()
 
     def get_candles(self, symbols="ETHBTC"):
-        print ("%s/public/candles/%s" % (self.url, symbols))
-        print (self.session.get("%s/public/candles/%s" % (self.url, symbols)))
-        return self.session.get("%s/public/candles/%s" % (self.url, symbols)).json()
+        month_ago = datetime.datetime.fromtimestamp(time.mktime((
+          self.now.year, self.now.month - 3,self.now.day,0,0,0,0,0,0)))
+        data = {'sort':"DESC", 'from':month_ago}
+        print ("{0}/public/candles/{1}".format(self.url,symbols))
+        print ("date:{0}".format(month_ago))
+        print (self.session.get("{0}/public/candles/{1}".format(self.url, symbols),params=data))
+        return self.session.get("{0}/public/candles/{1}".format(self.url, symbols),params=data).json()
 
     def get_history_trades(self):
         return self.session.get("%s/history/trades/" % (self.url)).json()
