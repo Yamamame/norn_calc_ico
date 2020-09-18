@@ -95,5 +95,6 @@ probability_model = tf.keras.Sequential([
     tf.keras.layers.Softmax()
 ])
 
+# x_testの戦闘から5つが10この内のどのラベルに近いかを確率で表示
 print("test :{0}".format(x_test[:5]))
 print(probability_model(x_test[:5]))

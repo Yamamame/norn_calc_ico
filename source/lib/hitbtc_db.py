@@ -185,7 +185,8 @@ class HITBTCDB(object):
                 if debug != 0 :
                     print('this INSERT OK %d' , data_row['id'])
             if debug != 0 :
-                print('finish and commit ')
+                print('finish and commit {0},{1},{2}'.format(
+                    current_sql, set_symbols, data_row['timestamp']))
         self.conn.commit()
 
     def trading_balance_and_average(self,trading_data_dict):
