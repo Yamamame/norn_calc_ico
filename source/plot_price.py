@@ -25,7 +25,7 @@ if  len(args) > 1 :
     loop_flg=0
 debug = 1
 
-span_start = 0.1
+span_start = 0.5
 span_end = 0
 
 table_get_col = {"label":0,"time":1,"min":2,"close":5}
