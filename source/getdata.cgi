@@ -33,10 +33,11 @@ db_name="altcoins"
 config = -1
 
 for line in f :
-    if '[mysql]' in line:
+    if '[mysql]' in line :
         config = 0
     if config >= 0 :
-        strkeydict = line.split('=')
+        # 改行コードが除去されないので除去を同時に行う
+        strkeydict = line.read().splitlines().split('=')
         if 'user' in strkeydict[0] :
             db_user=strkeydict[1]
         if 'password' in strkeydict[0] :
