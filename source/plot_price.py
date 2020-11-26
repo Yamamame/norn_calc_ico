@@ -18,6 +18,28 @@ import warnings
 args = sys.argv
 loop_flg = 1
 instrument_strs = ['ETHBTC', 'XMRBTC', 'XMRETH', ]
+data_dir = os.environ['HOME'] + '/hitbtc/'
+
+# dbの接続情報を取得
+f = open(data_dir + '.my.cnf', 'r')
+db_host = "localhost"
+db_user = ""
+db_pass = ""
+db_name = "altcoins"
+config = -1
+
+for line in f.read().splitlines():
+    if '[mysql]' in line:
+        config = 0
+    if config >= 0:
+        # 改行コードが除去されないので除去を同時に行う
+        strkeydict = line.split('=')
+        if 'user' in strkeydict[0]:
+            db_user = strkeydict[1]
+        if 'password' in strkeydict[0]:
+            db_pass = strkeydict[1]
+        if 'host' in strkeydict[0]:
+            db_host = strkeydict[1]
 
 instrument_str = 'ETHBTC'
 if  len(args) > 1 :
@@ -28,18 +50,18 @@ debug = 1
 span_start = 0.5
 span_end = 0
 
-table_get_col = {"label":0,"time":1,"min":2,"close":5}
-# 2はmin,3はmax,4はopen,5はclose
+table_get_col = {"label":0,"time":1,"min":2,"close":5} # 2はmin,3はmax,4はopen,5はclose
 data_kind = 5
 data_kind_open = 4
-data_kind_close = 5
-# %matplotlib inline
+data_kind_close = 5 # %matplotlib inline
 # 30分毎なので47で1日 0:00と24:00がおなじになるように
 time_ago = 47 * int(30 * (span_start - span_end))
 # 評価パラメータをいくつ用いるか？
 num_param = 1
 # 単位時間何個分次の値を予測するか？
 pre_time = 1
+# 差分の定数
+DIFFERENCE = 0.05
 
 # plotのためのカウンター
 plot_count = 0
@@ -93,9 +115,13 @@ for instrument_str in instrument_strs :
         D[i] = abs(targ_data[i, data_kind_open] - targ_data[i, data_kind_close]) * 50
         Y[i] = targ_data[i, data_kind]
     
+    # より大きな日付を保存する
+    # 初期化は十分小さい値を適当に設定
+    post_date = datetime.datetime(2006, 4, 3, 9, 0, 0)
     # 直前の取引の価格を設定
     # [0]instrument,[1]price,[2]quantity,[3]side,[4]exec_date
     pre_trades = db_access.pre_trade_value(instrument=instrument_str)
+    E = np.zeros(len(targ_data) - 1)
     print("exexdate:{}".format(pre_trades))
     for pre_trade in pre_trades:
         if pre_trade[3] == 'buy' :
@@ -103,11 +129,20 @@ for instrument_str in instrument_strs :
             R = (X * 0) + pre_trade[1]
             ax[0, plot_count].plot(X, R, linestyle='solid', color='g',
                                    marker='.', label='buy = ' + pre_trade[4].strftime('%Y/%m/%d'))
+            if pre_trade[4] > post_date:
+                post_date = pre_trade[4]
+                E = (X * 0) + (pre_trade[1] * (1 + DIFFERENCE))
         else :
             # pre_tradeの価格をXの数だけ作る
             H = (X * 0) + pre_trade[1]
             ax[0, plot_count].plot(X, H, linestyle='solid', color='Y',
                                    marker='.', label='sell = ' + pre_trade[4].strftime('%Y/%m/%d'))
+            if pre_trade[4] > post_date:
+                post_date = pre_trade[4]
+                E = (X * 0) + (pre_trade[1] * (1 - DIFFERENCE))
+    # print("E:{}".format(E))
+    ax[0, plot_count].plot(X, E, linestyle='dashdot', color='r',
+                           marker='.', label='est = ' + post_date.strftime('%Y/%m/%d'))
 
 
     # 上で作った画像にplot
