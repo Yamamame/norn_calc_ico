@@ -135,13 +135,13 @@ for instrument_str in instrument_strs :
         else :
             # pre_tradeの価格をXの数だけ作る
             H = (X * 0) + pre_trade[1]
-            ax[0, plot_count].plot(X, H, linestyle='solid', color='Y',
+            ax[0, plot_count].plot(X, H, linestyle='solid', color='r',
                                    marker='.', label='sell = ' + pre_trade[4].strftime('%Y/%m/%d'))
             if pre_trade[4] > post_date:
                 post_date = pre_trade[4]
                 E = (X * 0) + (pre_trade[1] * (1 - DIFFERENCE))
     # print("E:{}".format(E))
-    ax[0, plot_count].plot(X, E, linestyle='dashdot', color='r',
+    ax[0, plot_count].plot(X, E, linestyle='dashdot', color='Y',
                            marker='.', label='est = ' + post_date.strftime('%Y/%m/%d'))
 
 
