@@ -19,7 +19,7 @@ import hitbtc_db
 
 not_service_symbols = ['DSHBTC','FCNBTC','XMOBTC']
 
-data_dir = "/home/yama/hitbtc/"
+data_dir = os.environ['HOME'] + '/hitbtc/'
 f = open(data_dir + 'apikey.txt', 'r')
 for line in f :
     strkeydict = line.split(None)
