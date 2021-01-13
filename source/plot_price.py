@@ -166,3 +166,8 @@ for instrument_str in instrument_strs :
 
 # プロット表示(設定の反映)
 plt.show()
+
+# グラフの描画先の準備
+fig = plt.figure()
+# ファイルに保存
+fig.savefig("graph.png")
