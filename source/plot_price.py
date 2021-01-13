@@ -67,7 +67,7 @@ DIFFERENCE = 0.05
 plot_count = 0
 
 # グラフの描画先の準備
-fig = plt.figure()
+fig = plt.figure(figsize=(8.0, 5.0))
 
 # 出力画像の作成
 ax = fig.subplots(2, len(instrument_strs))
