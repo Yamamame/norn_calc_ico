@@ -70,7 +70,7 @@ plot_count = 0
 fig = plt.figure()
 
 # 出力画像の作成
-fig, ax = plt.subplots(2, len(instrument_strs))
+ax = fig.subplots(2, len(instrument_strs))
 # データの読み込みのためライブラリオープン
 db_access = hitbtc_db.HITBTCDB()
 # if loop_flg == 1 :
