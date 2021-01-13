@@ -65,6 +65,10 @@ DIFFERENCE = 0.05
 
 # plotのためのカウンター
 plot_count = 0
+
+# グラフの描画先の準備
+fig = plt.figure()
+
 # 出力画像の作成
 fig, ax = plt.subplots(2, len(instrument_strs))
 # データの読み込みのためライブラリオープン
@@ -167,7 +171,5 @@ for instrument_str in instrument_strs :
 # プロット表示(設定の反映)
 plt.show()
 
-# グラフの描画先の準備
-fig = plt.figure()
 # ファイルに保存
 fig.savefig("graph.png")
