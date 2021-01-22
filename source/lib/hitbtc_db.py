@@ -12,6 +12,9 @@ class HITBTCDB(object):
         self.db_user     = user
         self.db_pass     = password
         self.db_name     = db_name
+        self.table_prefix = ''
+        if self.mode == 'bittrex' :
+            self.table_prefix = 'bittrex_'
         self.open_conn()
 
     def open_conn(self):
@@ -58,7 +61,7 @@ class HITBTCDB(object):
             data_dict['High'], data_dict['PrevDay'], data_dict['Last'],
             data_dict['BaseVolume'], data_dict['Volume'],
         )
-        current_sql = ' INSERT INTO trade_candles '
+        current_sql = ' INSERT INTO '+ self.table_prefix +'trade_candles '
         current_sql += ' (timestamp,symbols,min'
         current_sql += ' ,max,open,close'
         current_sql += ' ,volume,volumequote,uptime)'
