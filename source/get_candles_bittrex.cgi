@@ -24,7 +24,7 @@ api_pub_keys=""
 api_sec_keys=""
 # とりあえずhitbtcで取引しているものだけに
 target_currency = ['XDN', 'XMR', 'XMO', 'FCN', 'DSH', 'BTG']
-data_dir = "/home/yama/Documents/bittrex/"
+data_dir = os.environ['HOME'] + '/bittrex/'
 f = open(data_dir + 'apikey.txt', 'r')
 for line in f :
     strkeydict = line.split(None)
