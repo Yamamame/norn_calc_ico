@@ -27,9 +27,30 @@ for line in f :
       api_pub_keys = strkeydict[1]
     else :
       api_sec_keys = strkeydict[1]
+
+f = open(data_dir + '.my.cnf', 'r')
+db_host="localhost"
+db_user=""
+db_pass=""
+db_name="altcoins"
+config = -1
+
+for line in f.read().splitlines() :
+    if '[mysql]' in line :
+        config = 0
+    if config >= 0 :
+        # 改行コードが除去されないので除去を同時に行う
+        strkeydict = line.split('=')
+        if 'user' in strkeydict[0] :
+            db_user=strkeydict[1]
+        if 'password' in strkeydict[0] :
+            db_pass=strkeydict[1]
+        if 'host' in strkeydict[0] :
+          db_host = strkeydict[1]
+          
 target_rest_url  = "https://api.hitbtc.com"
 client = hitbtc.HITBTClient(target_rest_url, api_pub_keys, api_sec_keys)
-db_access = hitbtc_db.HITBTCDB()
+db_access = hitbtc_db.HITBTCDB(host=db_host,user=db_user,password=db_pass,db_name=db_name)
 eth_btc = client.get_symbol('ETHBTC')
 address = client.get_address('ETH')     # get eth address for deposit
 print('ETH deposit address: "%s"' % address)
