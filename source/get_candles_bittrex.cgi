@@ -7,7 +7,6 @@
 import sys
 import os
 current_path = os.getcwd()
-print current_path
 sys.path.append(os.path.dirname(__file__) + '/lib/')
 import numpy as np
 import pandas as pd
