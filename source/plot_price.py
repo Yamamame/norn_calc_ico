@@ -145,7 +145,7 @@ for instrument_str in instrument_strs :
                 post_date = pre_trade[4]
                 E = (X * 0) + (pre_trade[1] * (1 - DIFFERENCE))
     # print("E:{}".format(E))
-    ax[0, plot_count].plot(X, E, linestyle='dashdot', color='Y',
+    ax[0, plot_count].plot(X, E, linestyle='dashdot', color='y',
                            marker='.', label='est = ' + post_date.strftime('%Y/%m/%d'))
 
 
