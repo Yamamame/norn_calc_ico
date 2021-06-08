@@ -6,7 +6,7 @@ import requests
 import datetime
 import time
 
-class HITBTClient(object):
+class BITFLYClient(object):
     def __init__(self, url, public_key, secret):
         self.url = url + "v1/"
         self.session = requests.session()
